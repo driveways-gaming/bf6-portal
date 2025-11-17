@@ -1,0 +1,15 @@
+{
+    "extends": "../../tsconfig.json",
+    "compilerOptions": {
+        "types": [
+            "../../code/mod",
+            "jest"
+        ],
+        "paths": {
+            "modlib": [
+                "../../code/modlib"
+            ]
+        },
+        "outDir": "dist",
+    }
+}
