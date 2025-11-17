@@ -78,7 +78,7 @@ namespace Driveways {
                     if (metric.count > 0) {
                         // Accumulated metric - show full stats
                         const avg = metric.total / metric.count;
-                        output += `  ${name}: count=${metric.count}, avg=${avg.toFixed(2)}, min=${metric.min}, max=${metric.max}, last=${metric.last}\n`;
+                        output += `  ${name}: total=${metric.total}, avg=${avg.toFixed(2)}, min=${metric.min}, max=${metric.max}, last=${metric.last}, n=${metric.count}\n`;
                     } else {
                         // Record-only metric - show just last, min, max
                         const minStr = metric.min === Infinity ? 'N/A' : metric.min.toString();
@@ -1653,7 +1653,7 @@ Driveways.Events.OnPlayerDeployed((player) => {
     Log("Player deployed");
 });
 // const surfers = new Surfers();
-const blockSwarm = new WallOfBlocks(mod.CreateVector(-204, 220, 135), 4, 4, 1.5, 1.5, 1.5);
+// const blockSwarm = new WallOfBlocks(mod.CreateVector(-204, 220, 135), 4, 4, 1.5, 1.5, 1.5);
 // const mapper = new Driveways.Terrain.Mapper(1.0);
 // const grid = new Driveways.Terrain.Grid(10, 10, 20, 1000, new Driveways.Physics.Vec3(0, 180, 0), mod.RuntimeSpawn_Common.HighwayOverpass_Foundation_01);
 
@@ -2428,7 +2428,7 @@ Driveways.Events.OnGameModeStarted(() => {
 });
 
 
-let numFollowers = 100;
+let numFollowers = 0;
 let lastFollowerSpawned = -1;
 Driveways.Events.OngoingGlobal(() => {
     if (!gameStarted) {
@@ -2491,18 +2491,18 @@ Driveways.Events.OngoingPlayer((player: mod.Player) => {
     if (!Driveways.Players.isAlive(player)) {
         return;
     }
-    if (initialPlayerPosition === null) {
-        initialPlayerPosition = mod.GetSoldierState(player, mod.SoldierStateVector.GetPosition);
-        vfxObject = mod.SpawnObject(mod.RuntimeSpawn_Common.FX_Grenade_Fragmentation_Detonation, initialPlayerPosition, mod.CreateVector(0, 0, 0), mod.CreateVector(1, 1, 1));
-        vfxObject2 = mod.SpawnObject(mod.RuntimeSpawn_Common.FX_Grenade_Fragmentation_Detonation, initialPlayerPosition, mod.CreateVector(0, 0, 0), mod.CreateVector(1, 1, 1));
-        markerObject = mod.SpawnObject(mod.RuntimeSpawn_Common.BarrierStoneBlock_01_A, initialPlayerPosition, mod.CreateVector(0, 0, 0), mod.CreateVector(1, 1, 1));
-        if (vfxObject) {
-            mod.EnableVFX(vfxObject, false);
-        }
-        if (vfxObject) {
-            vfxObjectPosition = initialPlayerPosition;
-        }
-    }
+    // if (initialPlayerPosition === null) {
+    //     initialPlayerPosition = mod.GetSoldierState(player, mod.SoldierStateVector.GetPosition);
+    //     vfxObject = mod.SpawnObject(mod.RuntimeSpawn_Common.FX_Grenade_Fragmentation_Detonation, initialPlayerPosition, mod.CreateVector(0, 0, 0), mod.CreateVector(1, 1, 1));
+    //     vfxObject2 = mod.SpawnObject(mod.RuntimeSpawn_Common.FX_Grenade_Fragmentation_Detonation, initialPlayerPosition, mod.CreateVector(0, 0, 0), mod.CreateVector(1, 1, 1));
+    //     markerObject = mod.SpawnObject(mod.RuntimeSpawn_Common.BarrierStoneBlock_01_A, initialPlayerPosition, mod.CreateVector(0, 0, 0), mod.CreateVector(1, 1, 1));
+    //     if (vfxObject) {
+    //         mod.EnableVFX(vfxObject, false);
+    //     }
+    //     if (vfxObject) {
+    //         vfxObjectPosition = initialPlayerPosition;
+    //     }
+    // }
     // if jumping and not uiopen then open it
     if (mod.GetSoldierState(player, mod.SoldierStateBool.IsJumping) && !uiOpen) {
         mod.EnableUIInputMode(true, player);
@@ -2522,68 +2522,68 @@ Driveways.Events.OngoingPlayer((player: mod.Player) => {
     //     }
     // });
     // emite metrics for player state
-    const states = [
-        //IsInAir  IsJumping IsOnGround IsParachuting
-        mod.SoldierStateBool.IsInAir,
-        mod.SoldierStateBool.IsJumping,
-        mod.SoldierStateBool.IsOnGround,
-        mod.SoldierStateBool.IsParachuting,
-    ];
-    const stateNameMap: Map<mod.SoldierStateBool, string> = new Map([
-        [mod.SoldierStateBool.IsInAir, 'IsInAir'],
-        [mod.SoldierStateBool.IsJumping, 'IsJumping'],
-        [mod.SoldierStateBool.IsOnGround, 'IsOnGround'],
-        [mod.SoldierStateBool.IsParachuting, 'IsParachuting'],
-    ]);
-    for (const state of states) {
-        const isState = mod.GetSoldierState(player, state);
-        const stateName = stateNameMap.get(state) || 'Unknown';
-        Driveways.Metrics.accumulatePeriodic(`player_state_${stateName}`, isState ? 1 : 0);
-    }
+    // const states = [
+    //     //IsInAir  IsJumping IsOnGround IsParachuting
+    //     mod.SoldierStateBool.IsInAir,
+    //     mod.SoldierStateBool.IsJumping,
+    //     mod.SoldierStateBool.IsOnGround,
+    //     mod.SoldierStateBool.IsParachuting,
+    // ];
+    // const stateNameMap: Map<mod.SoldierStateBool, string> = new Map([
+    //     [mod.SoldierStateBool.IsInAir, 'IsInAir'],
+    //     [mod.SoldierStateBool.IsJumping, 'IsJumping'],
+    //     [mod.SoldierStateBool.IsOnGround, 'IsOnGround'],
+    //     [mod.SoldierStateBool.IsParachuting, 'IsParachuting'],
+    // ]);
+    // for (const state of states) {
+    //     const isState = mod.GetSoldierState(player, state);
+    //     const stateName = stateNameMap.get(state) || 'Unknown';
+    //     Driveways.Metrics.accumulatePeriodic(`player_state_${stateName}`, isState ? 1 : 0);
+    // }
 
-    Driveways.RateLimiter.everyNTicks('player_grenades', grenadeInterval, () => {
-        if (vfxObject === null || vfxObject2 === null || markerObject === null || vfxObjectPosition === null) {
-            return;
-        }
-        const playerPosition = mod.GetSoldierState(player, mod.SoldierStateVector.GetPosition);
-        const targetPosition = Driveways.Physics.Vec3.fromModVector(playerPosition);
-        const target2Position = Driveways.Physics.Vec3.fromModVector(playerPosition);
-        targetPosition.y += 20;
-        target2Position.y += 20;
-        target2Position.x += 10;
+    // Driveways.RateLimiter.everyNTicks('player_grenades', grenadeInterval, () => {
+    //     if (vfxObject === null || vfxObject2 === null || markerObject === null || vfxObjectPosition === null) {
+    //         return;
+    //     }
+    //     const playerPosition = mod.GetSoldierState(player, mod.SoldierStateVector.GetPosition);
+    //     const targetPosition = Driveways.Physics.Vec3.fromModVector(playerPosition);
+    //     const target2Position = Driveways.Physics.Vec3.fromModVector(playerPosition);
+    //     targetPosition.y += 20;
+    //     target2Position.y += 20;
+    //     target2Position.x += 10;
 
-        if (flipFlop) {
-            // const vfxPosition = vfxObjectPosition;
-            // const vfxPositionVec3 = Driveways.Physics.Vec3.fromModVector(vfxPosition);
-            // Log('VFX Position: ' + vfxPositionVec3.x + ', ' + vfxPositionVec3.y + ', ' + vfxPositionVec3.z);
-            // const positionDelta = targetPosition.sub(vfxPositionVec3);
-            // vfxObjectPosition = mod.Add(vfxPosition, positionDelta.toModVector());
-            // Log('Position Delta: ' + positionDelta.x + ', ' + positionDelta.y + ', ' + positionDelta.z);
-            // mod.MoveObject(vfxObject, positionDelta.toModVector());
-            // const markerPosition = mod.GetObjectPosition(markerObject);
-            // const markerPositionVec3 = Driveways.Physics.Vec3.fromModVector(markerPosition);
-            // Log('Marker Position: ' + markerPositionVec3.x + ', ' + markerPositionVec3.y + ', ' + markerPositionVec3.z);
-            // const markerPositionDelta = targetPosition.sub(markerPositionVec3);
-            // Log('Marker Position Delta: ' + markerPositionDelta.x + ', ' + markerPositionDelta.y + ', ' + markerPositionDelta.z);
-            mod.MoveVFX(vfxObject, targetPosition.toModVector(), mod.CreateVector(0, 0, 0));
-            mod.MoveVFX(vfxObject2, target2Position.toModVector(), mod.CreateVector(0, 0, 0));
-            mod.SetObjectTransform(markerObject, mod.CreateTransform(targetPosition.toModVector(), mod.CreateVector(0, 0, 0)));
-            // const positionDelta = 
-            mod.EnableVFX(vfxObject, true);
-            mod.EnableVFX(vfxObject2, true);
-            mod.EnableVFX(vfxObject, false);
-            mod.EnableVFX(vfxObject2, false);
-            Debug("Enabling VFX");
-        } else {
-            Debug('Disabling VFX');
-            mod.EnableVFX(vfxObject, false);
-            mod.EnableVFX(vfxObject2, false);
-        }
-        flipFlop = !flipFlop;
-        // VFXSpawner.spawnVFX(mod.RuntimeSpawn_Common.FX_Grenade_Fragmentation_Detonation, position, 10000);
-        // VFX.makeABoom(targetPosition);
-        // mod.EnableVFX(vfxObject, true);
-    });
+    //     if (flipFlop) {
+    //         // const vfxPosition = vfxObjectPosition;
+    //         // const vfxPositionVec3 = Driveways.Physics.Vec3.fromModVector(vfxPosition);
+    //         // Log('VFX Position: ' + vfxPositionVec3.x + ', ' + vfxPositionVec3.y + ', ' + vfxPositionVec3.z);
+    //         // const positionDelta = targetPosition.sub(vfxPositionVec3);
+    //         // vfxObjectPosition = mod.Add(vfxPosition, positionDelta.toModVector());
+    //         // Log('Position Delta: ' + positionDelta.x + ', ' + positionDelta.y + ', ' + positionDelta.z);
+    //         // mod.MoveObject(vfxObject, positionDelta.toModVector());
+    //         // const markerPosition = mod.GetObjectPosition(markerObject);
+    //         // const markerPositionVec3 = Driveways.Physics.Vec3.fromModVector(markerPosition);
+    //         // Log('Marker Position: ' + markerPositionVec3.x + ', ' + markerPositionVec3.y + ', ' + markerPositionVec3.z);
+    //         // const markerPositionDelta = targetPosition.sub(markerPositionVec3);
+    //         // Log('Marker Position Delta: ' + markerPositionDelta.x + ', ' + markerPositionDelta.y + ', ' + markerPositionDelta.z);
+    //         mod.MoveVFX(vfxObject, targetPosition.toModVector(), mod.CreateVector(0, 0, 0));
+    //         mod.MoveVFX(vfxObject2, target2Position.toModVector(), mod.CreateVector(0, 0, 0));
+    //         mod.SetObjectTransform(markerObject, mod.CreateTransform(targetPosition.toModVector(), mod.CreateVector(0, 0, 0)));
+    //         // const positionDelta = 
+    //         mod.EnableVFX(vfxObject, true);
+    //         mod.EnableVFX(vfxObject2, true);
+    //         mod.EnableVFX(vfxObject, false);
+    //         mod.EnableVFX(vfxObject2, false);
+    //         Debug("Enabling VFX");
+    //     } else {
+    //         Debug('Disabling VFX');
+    //         mod.EnableVFX(vfxObject, false);
+    //         mod.EnableVFX(vfxObject2, false);
+    //     }
+    //     flipFlop = !flipFlop;
+    //     // VFXSpawner.spawnVFX(mod.RuntimeSpawn_Common.FX_Grenade_Fragmentation_Detonation, position, 10000);
+    //     // VFX.makeABoom(targetPosition);
+    //     // mod.EnableVFX(vfxObject, true);
+    // });
 });
 Driveways.Events.OnPlayerDeployed((player: mod.Player) => {
     mod.SetCameraTypeForPlayer(player, mod.Cameras.ThirdPerson);
@@ -2591,6 +2591,7 @@ Driveways.Events.OnPlayerDeployed((player: mod.Player) => {
 
 
 interface SpawnedVFX {
+    type: mod.RuntimeSpawn_Common;
     vfx: mod.VFX;
     position: Driveways.Physics.Vec3;
     expiresAt: Date;
@@ -2598,8 +2599,46 @@ interface SpawnedVFX {
 class VFXSpawner {
     static spawnedVFX: SpawnedVFX[] = [];
     static VFX_LIMIT = 1000;
+    static freeList = new Map<mod.RuntimeSpawn_Common, SpawnedVFX[]>();
     static spawnVFX(vfx: mod.RuntimeSpawn_Common, position: Driveways.Physics.Vec3, expiresAfter: number): SpawnedVFX | null {
-        if (this.spawnedVFX.length >= this.VFX_LIMIT) {
+        // if item in freeList, use it
+        const free = this.freeList.get(vfx);
+        if (free && free.length > 0) {
+            const freeVfx = free.shift();
+            if (free.length === 0) {
+                this.freeList.delete(vfx);
+            }
+            if (freeVfx) {
+                mod.EnableVFX(freeVfx.vfx, true);
+                mod.MoveVFX(freeVfx.vfx, position.toModVector(), mod.CreateVector(0, 0, 0));
+                this.spawnedVFX.push(freeVfx);
+                freeVfx.position = position;
+                freeVfx.expiresAt = new Date(Date.now() + expiresAfter);
+                Driveways.Metrics.increment('vfx_reused');
+                return freeVfx;
+            }
+        }
+        // if at vfx limit, try to unspawn an item from the freeList
+        if (this.spawnedVFX.length + this.numFree() >= this.VFX_LIMIT) {
+            const vfxKeys = Array.from(this.freeList.keys());
+            for (const vfxKey of vfxKeys) {
+                const free = this.freeList.get(vfxKey);
+                if (free && free.length > 0) {
+                    const freeVfx = free.shift();
+                    if (freeVfx) {
+                        mod.UnspawnObject(freeVfx.vfx);
+                        Driveways.Metrics.increment('vfx_unspawned_freelist');
+                        break;
+                    }
+                    if (free.length === 0) {
+                        this.freeList.delete(vfxKey);
+                    }
+                }
+            }
+        }
+        // if no item in freeList, return null
+        // otherwise spawn it and return the spawned item
+        if (this.spawnedVFX.length + this.numFree() >= this.VFX_LIMIT) {
             Driveways.Metrics.increment('vfx_limit_reached');
             return null;
         }
@@ -2609,6 +2648,7 @@ class VFXSpawner {
             Driveways.Metrics.increment('vfx_spawned');
         }
         const spawned = {
+            type: vfx,
             vfx: vfxObject,
             position: position,
             expiresAt: new Date(Date.now() + expiresAfter),
@@ -2617,25 +2657,106 @@ class VFXSpawner {
         this.spawnedVFX.push(spawned);
         return spawned;
     }
+
+    static numFree(): number {
+        let numFree = 0;
+        for (const free of this.freeList.values()) {
+            numFree += free.length;
+        }
+        return numFree;
+    }
     static update(): void {
         const now = new Date();
-        let unspawned = 0;
+        let freed = 0;
+        let unspawnedAtLimit = 0;
         this.spawnedVFX = this.spawnedVFX.filter(spawned => {
             if (spawned.expiresAt < now) {
-                mod.UnspawnObject(spawned.vfx);
-                unspawned++;
+                if (this.spawnedVFX.length + this.numFree() < this.VFX_LIMIT) {
+                    mod.EnableVFX(spawned.vfx, false);
+                    const free = this.freeList.get(spawned.type);
+                    if (free) {
+                        free.push(spawned);
+                    } else {
+                        this.freeList.set(spawned.type, [spawned]);
+                    }
+                    freed++;
+                } else {
+                    mod.UnspawnObject(spawned.vfx);
+                    unspawnedAtLimit++;
+                }
                 return false;
             }
             return true;
         });
         if (Driveways.Metrics) {
             Driveways.Metrics.record('vfx_living', this.spawnedVFX.length);
-            if (unspawned > 0) {
-                Driveways.Metrics.increment('vfx_unspawned', unspawned);
+            if (freed > 0) {
+                Driveways.Metrics.increment('vfx_freed', freed);
+            }
+            Driveways.Metrics.record('vfx_free', this.numFree());
+            if (unspawnedAtLimit > 0) {
+                Driveways.Metrics.increment('vfx_unspawned_at_limit', unspawnedAtLimit);
             }
         }
     }
 }
+
+
+const explosionsVFX: mod.RuntimeSpawn_Common[] = [
+    mod.RuntimeSpawn_Common.BarrelOilExplosive_01,
+    mod.RuntimeSpawn_Common.FX_Airburst_Incendiary_Detonation,
+    mod.RuntimeSpawn_Common.FX_Airburst_Incendiary_Detonation_Friendly,
+    mod.RuntimeSpawn_Common.FX_ArtilleryStrike_Explosion_01,
+    mod.RuntimeSpawn_Common.FX_ArtilleryStrike_Explosion_GS,
+    mod.RuntimeSpawn_Common.FX_ArtilleryStrike_Explosion_GS_SP_Beach,
+    mod.RuntimeSpawn_Common.FX_Bomb_Mk82_AIR_Detonation,
+    mod.RuntimeSpawn_Common.FX_BreachingDart_Breach_Detonation,
+    mod.RuntimeSpawn_Common.FX_BreachingDart_NoBreach_Detonation,
+    mod.RuntimeSpawn_Common.FX_Carrier_Explosion_Dist,
+    mod.RuntimeSpawn_Common.FX_CivCar_SUV_Explosion,
+    mod.RuntimeSpawn_Common.FX_Gadget_AirburstLauncher_Detonation,
+    mod.RuntimeSpawn_Common.FX_Gadget_AT_Mine_Detonation,
+    mod.RuntimeSpawn_Common.FX_Gadget_C4_Explosives_Detonation,
+    mod.RuntimeSpawn_Common.FX_Gadget_C4_Explosives_Detonation_Underwater,
+    mod.RuntimeSpawn_Common.FX_Gadget_DeployableMortar_Detonation,
+    mod.RuntimeSpawn_Common.FX_Gadget_DeployableMortar_Detonation_Underwater,
+    mod.RuntimeSpawn_Common.FX_Gadget_EIDOS_Intercept_Detonation,
+    mod.RuntimeSpawn_Common.FX_Gadget_EODBot_ClusterFragmentCharge_Detonation,
+    mod.RuntimeSpawn_Common.FX_Gadget_M4_SLAM_Detonation,
+    mod.RuntimeSpawn_Common.FX_Gadget_MPAPS_Intercept_Detonation,
+    mod.RuntimeSpawn_Common.FX_Gadget_PTKM_Submunition_Detonation,
+    mod.RuntimeSpawn_Common.FX_Gadget_SmokeBarrage_AirBurst_Det,
+    mod.RuntimeSpawn_Common.FX_Gadget_SmokeBarrage_Cluster_Det,
+    mod.RuntimeSpawn_Common.FX_Gadget_StickyGrenade_Detonation,
+    mod.RuntimeSpawn_Common.FX_Grenade_40mm_AT_Detonation,
+    mod.RuntimeSpawn_Common.FX_Grenade_40mm_HE_Detonation,
+    mod.RuntimeSpawn_Common.FX_Grenade_40mm_HE_Detonation_Underwater,
+    mod.RuntimeSpawn_Common.FX_Grenade_40mm_Thermobaric_Detonation,
+    mod.RuntimeSpawn_Common.FX_Grenade_AntiTank_Detonation,
+    mod.RuntimeSpawn_Common.FX_Grenade_BreachingDartFlashbang_Detonation,
+    mod.RuntimeSpawn_Common.FX_Grenade_Concussion_Detonation,
+    mod.RuntimeSpawn_Common.FX_Grenade_Flashbang_Detonation,
+    mod.RuntimeSpawn_Common.FX_Grenade_Fragmentation_Detonation,
+    mod.RuntimeSpawn_Common.FX_Grenade_Fragmentation_Detonation_Underwater,
+    mod.RuntimeSpawn_Common.FX_Grenade_Fragmentation_ImpactGrenade_Detonation,
+    mod.RuntimeSpawn_Common.FX_Grenade_Fragmentation_MiniV40_Detonation,
+    mod.RuntimeSpawn_Common.FX_Grenade_Incendiary_Detonation,
+    mod.RuntimeSpawn_Common.FX_Grenade_Smoke_Detonation,
+    mod.RuntimeSpawn_Common.FX_Grenade_Smoke_Detonation_Upgraded,
+    mod.RuntimeSpawn_Common.FX_Grenade_Smoke_Explosion_High_Wind,
+    mod.RuntimeSpawn_Common.FX_Mine_M18_Claymore_Detonation,
+    mod.RuntimeSpawn_Common.FX_Missile_Javelin_Detonation,
+    mod.RuntimeSpawn_Common.FX_Missile_Javelin_Detonation_Underwater,
+    mod.RuntimeSpawn_Common.FX_Vehicle_Car_Destruction_Death_Explosion_PTV,
+    mod.RuntimeSpawn_Common.FX_Vehicle_InstSpec_Drone_Explosion,
+    mod.RuntimeSpawn_Common.SFX_Destruction_Props_FX_Electric_PropExplosionPowerline_Medium_OneShot3D,
+    mod.RuntimeSpawn_Common.SFX_Gadgets_SupplyDrop_CrateExplode_3D,
+    mod.RuntimeSpawn_Common.SFX_Levels_Cairo_SP_NightRaid_Spots_Fire_FlareShotExplode_OneShot3D,
+    mod.RuntimeSpawn_Common.SFX_Soldier_Damage_Explosion_Crack_OneShot2D,
+    mod.RuntimeSpawn_Common.SFX_Soldier_Damage_Explosion_Death_OneShot2D,
+    mod.RuntimeSpawn_Common.SFX_Soldier_Damage_Explosion_Ring_SimpleLoop2D,
+    mod.RuntimeSpawn_Common.SFX_Soldier_Damage_ExplosionDebris_OneShot2D,
+];
 
 class VFX {
     static makeABoom(position: Driveways.Physics.Vec3) {
@@ -2690,3 +2811,88 @@ Driveways.Events.OngoingGlobal(() => {
 function GetPerformanceRatio(): number {
     return performanceRatio;
 }
+
+class VFXTestGrid {
+    origin: Driveways.Physics.Vec3;
+    numRows: number;
+    numCols: number;
+    spacing: number;
+    markerObject: mod.SpatialObject;
+    vfxOffset: number;
+    constructor(origin: Driveways.Physics.Vec3, numRows: number, numCols: number, spacing: number) {
+        this.origin = origin;
+        this.numRows = numRows;
+        this.numCols = numCols;
+        this.spacing = spacing;
+        this.markerObject = mod.SpawnObject(mod.RuntimeSpawn_Common.BarrierStoneBlock_01_A, origin.toModVector(), mod.CreateVector(0, 0, 0), mod.CreateVector(1, 1, 1));
+        this.vfxOffset = 0;
+    }
+    makeBooms() {
+        mod.SetObjectTransform(this.markerObject, mod.CreateTransform(this.origin.toModVector(), mod.CreateVector(0, 0, 0)));
+        for (let row = 0; row < this.numRows; row++) {
+            for (let col = 0; col < this.numCols; col++) {
+                const position = new Driveways.Physics.Vec3(this.origin.x + col * this.spacing, this.origin.y + row * this.spacing, this.origin.z);
+                // VFX.makeABoom(position);
+                let index = (this.vfxOffset + row * this.numCols + col) % explosionsVFX.length;
+                VFXSpawner.spawnVFX(explosionsVFX[index], position, 1000);
+            }
+        }
+    }
+    public moveOriginForward(distance: number) {
+        this.origin.z += distance;
+    }
+    public nextVFX() {
+        this.vfxOffset++;
+        this.vfxOffset %= explosionsVFX.length;
+    }
+}
+
+// test max good-ish performance move rate is 5 ticks for 16 vfx objects, 1000ms vfx object lifetime ~100 living, ~150 freed
+
+// on game start make vfx grid
+let vfxGrid: VFXTestGrid | null = null;
+Driveways.Events.OnGameModeStarted(() => {
+    vfxGrid = new VFXTestGrid(new Driveways.Physics.Vec3(-84.28,70,-61.43), 4, 4, 10);
+});
+let ticksInDirection = 0;
+let direction = 1;
+let gridMoveTickRate = 10;
+Driveways.Events.OngoingGlobal(() => {
+    Driveways.RateLimiter.everyNTicks('vfx_grid_move', gridMoveTickRate, () => {
+        if (vfxGrid) {
+            vfxGrid.moveOriginForward(10 * direction);
+            vfxGrid.makeBooms();
+            vfxGrid.nextVFX();
+            ticksInDirection++;
+            if (ticksInDirection >= 10) {
+                direction *= -1;
+                ticksInDirection = 0;
+            }
+        }
+    });
+});
+
+Driveways.Events.OnPlayerDeployed((player: mod.Player) => {
+    Driveways.DynamicUI.registerButton(mod.GetObjId(player), "vfx_grid_more_rows", () => {
+        if (vfxGrid) {
+            vfxGrid.numRows++;
+            Log("vfxGrid.numRows: " + vfxGrid.numRows);
+        }
+    }, mod.Message(mod.stringkeys.a));
+    Driveways.DynamicUI.registerButton(mod.GetObjId(player), "vfx_grid_less_rows", () => {
+        if (vfxGrid) {
+            vfxGrid.numRows--;
+            Log("vfxGrid.numRows: " + vfxGrid.numRows);
+        }
+    }, mod.Message(mod.stringkeys.b));
+    // move tickrate
+    // disaply tickrate
+    Driveways.DynamicUI.registerButton(mod.GetObjId(player), "vfx_grid_more_move_tick_rate", () => {
+        gridMoveTickRate++;
+        Log("gridMoveTickRate: " + gridMoveTickRate);
+    }, mod.Message(mod.stringkeys.a));
+    Driveways.DynamicUI.registerButton(mod.GetObjId(player), "vfx_grid_less_move_tick_rate", () => {
+        gridMoveTickRate--;
+        Log("gridMoveTickRate: " + gridMoveTickRate);
+    }, mod.Message(mod.stringkeys.b));
+});
