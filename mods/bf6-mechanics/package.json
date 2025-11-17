@@ -1,0 +1,13 @@
+{
+  "name": "bf6-mechanics",
+  "version": "1.0.0",
+  "type": "module",
+  "scripts": {
+    "build": "node bundle.js && tsc --noEmit",
+    "bundle": "node bundle.js"
+  },
+  "devDependencies": {
+    "typescript": "^5.9.3"
+  }
+}
+

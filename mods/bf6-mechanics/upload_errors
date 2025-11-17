@@ -1,0 +1,176 @@
+Script.ts (27,40): Element implicitly has an 'any' type because expression of type '"libModule"' can't be used to index type 'typeof globalThis'.
+  Property 'libModule' does not exist on type 'typeof globalThis'.
+Script.ts (32,40): Element implicitly has an 'any' type because expression of type '"mainModule"' can't be used to index type 'typeof globalThis'.
+  Property 'mainModule' does not exist on type 'typeof globalThis'.
+Script.ts (39,26): Parameter 'player' implicitly has an 'any' type.
+Script.ts (49,29): Parameter 'player' implicitly has an 'any' type.
+Script.ts (53,30): Parameter 'playerId' implicitly has an 'any' type.
+Script.ts (56,17): Property 'state' does not exist on type 'typeof _PlayerState'.
+Script.ts (58,29): Parameter 'player' implicitly has an 'any' type.
+Script.ts (71,25): Parameter 'player' implicitly has an 'any' type.
+Script.ts (71,33): Parameter 'eventOtherPlayer' implicitly has an 'any' type.
+Script.ts (71,51): Parameter 'eventDeathType' implicitly has an 'any' type.
+Script.ts (71,67): Parameter 'eventWeaponUnlock' implicitly has an 'any' type.
+Script.ts (74,34): Parameter 'eventPlayer' implicitly has an 'any' type.
+Script.ts (74,47): Parameter 'eventUIWidget' implicitly has an 'any' type.
+Script.ts (74,62): Parameter 'eventUIButtonEvent' implicitly has an 'any' type.
+Script.ts (78,21): Parameter 'playerId' implicitly has an 'any' type.
+Script.ts (79,32): Property 'state' does not exist on type 'typeof _PlayerState'.
+Script.ts (82,22): Property 'state' does not exist on type 'typeof _PlayerState'.
+Script.ts (86,23): Parameter 'player' implicitly has an 'any' type.
+Script.ts (93,44): Argument of type 'string' is not assignable to parameter of type 'WeaponAttachments'.
+Script.ts (96,34): No overload matches this call.
+  Overload 1 of 7, '(arg0: Player, arg1: Weapons, arg2: WeaponPackage): void', gave the following error.
+    Argument of type 'string' is not assignable to parameter of type 'Weapons'.
+  Overload 2 of 7, '(arg0: Player, arg1: Weapons, arg2: InventorySlots): void', gave the following error.
+    Argument of type 'string' is not assignable to parameter of type 'Weapons'.
+  Overload 3 of 7, '(arg0: Player, arg1: Gadgets, arg2: InventorySlots): void', gave the following error.
+    Argument of type 'string' is not assignable to parameter of type 'Gadgets'.
+Script.ts (100,16): Property 'state' does not exist on type 'typeof _PlayerState'.
+Script.ts (112,19): Parameter 'player' implicitly has an 'any' type.
+Script.ts (115,36): Expected 3 arguments, but got 2.
+Script.ts (116,102): Property 'width' does not exist on type 'typeof _TryGunsUI'.
+Script.ts (116,120): Property 'height' does not exist on type 'typeof _TryGunsUI'.
+Script.ts (117,20): Property 'registry' does not exist on type 'typeof _TryGunsUI'.
+Script.ts (158,17): Argument of type '{ name: unknown; callback: () => void; }[]' is not assignable to parameter of type '{ name: string; callback: () => void; }[]'.
+  Type '{ name: unknown; callback: () => void; }' is not assignable to type '{ name: string; callback: () => void; }'.
+    Types of property 'name' are incompatible.
+      Type 'unknown' is not assignable to type 'string'.
+Script.ts (200,17): Argument of type '{ name: unknown; callback: () => void; }[]' is not assignable to parameter of type '{ name: string; callback: () => void; }[]'.
+  Type '{ name: unknown; callback: () => void; }' is not assignable to type '{ name: string; callback: () => void; }'.
+    Types of property 'name' are incompatible.
+      Type 'unknown' is not assignable to type 'string'.
+Script.ts (225,35): Property 'itemsPerRow' does not exist on type 'typeof _TryGunsUI'.
+Script.ts (226,45): Property 'itemsPerRow' does not exist on type 'typeof _TryGunsUI'.
+Script.ts (226,81): Property 'itemsPerRow' does not exist on type 'typeof _TryGunsUI'.
+Script.ts (229,57): Property 'itemsPerRow' does not exist on type 'typeof _TryGunsUI'.
+Script.ts (230,48): Property 'itemsPerRow' does not exist on type 'typeof _TryGunsUI'.
+Script.ts (231,65): Property 'buttonWidth' does not exist on type 'typeof _TryGunsUI'.
+Script.ts (231,96): Property 'buttonHeight' does not exist on type 'typeof _TryGunsUI'.
+Script.ts (234,79): Property 'buttonWidth' does not exist on type 'typeof _TryGunsUI'.
+Script.ts (234,103): Property 'buttonHeight' does not exist on type 'typeof _TryGunsUI'.
+Script.ts (235,62): Parameter 'player2' implicitly has an 'any' type.
+Script.ts (235,71): Parameter 'eventUIWidget' implicitly has an 'any' type.
+Script.ts (235,86): Parameter 'eventUIButtonEvent' implicitly has an 'any' type.
+Script.ts (239,15): Parameter 'widget' implicitly has an 'any' type.
+Script.ts (254,60): Property 'buttonHeight' does not exist on type 'typeof _TryGunsUI'.
+Script.ts (257,38): Expected 3 arguments, but got 2.
+Script.ts (264,32): Parameter 'name' implicitly has an 'any' type.
+Script.ts (264,38): Parameter 'initialize' implicitly has an 'any' type.
+Script.ts (264,50): Parameter 'setup' implicitly has an 'any' type.
+Script.ts (275,30): Parameter 'player' implicitly has an 'any' type.
+Script.ts (275,38): Parameter 'eventUIWidget' implicitly has an 'any' type.
+Script.ts (275,53): Parameter 'eventUIButtonEvent' implicitly has an 'any' type.
+Script.ts (278,35): Property 'callbackRegistry' does not exist on type 'typeof _TryGunsUI'.
+Script.ts (283,29): Parameter 'player' implicitly has an 'any' type.
+Script.ts (283,37): Parameter 'widgetName' implicitly has an 'any' type.
+Script.ts (283,49): Parameter 'callback' implicitly has an 'any' type.
+Script.ts (285,23): Property 'callbackRegistry' does not exist on type 'typeof _TryGunsUI'.
+Script.ts (286,20): Property 'callbackRegistry' does not exist on type 'typeof _TryGunsUI'.
+Script.ts (288,18): Property 'callbackRegistry' does not exist on type 'typeof _TryGunsUI'.
+Script.ts (290,30): Parameter 'playerId' implicitly has an 'any' type.
+Script.ts (293,31): Parameter 'playerId' implicitly has an 'any' type.
+Script.ts (296,23): Parameter 'playerId' implicitly has an 'any' type.
+Script.ts (296,33): Parameter 'buttonId' implicitly has an 'any' type.
+Script.ts (299,20): Parameter 'playerId' implicitly has an 'any' type.
+Script.ts (304,20): Property 'registry' does not exist on type 'typeof _TryGunsUI'.
+Script.ts (305,20): Property 'callbackRegistry' does not exist on type 'typeof _TryGunsUI'.
+Script.ts (309,14): Property 'buttonHeight' does not exist on type 'typeof _TryGunsUI'.
+Script.ts (310,14): Property 'buttonWidth' does not exist on type 'typeof _TryGunsUI'.
+Script.ts (311,14): Property 'itemsPerRow' does not exist on type 'typeof _TryGunsUI'.
+Script.ts (312,14): Property 'width' does not exist on type 'typeof _TryGunsUI'.
+Script.ts (312,33): Property 'buttonWidth' does not exist on type 'typeof _TryGunsUI'.
+Script.ts (312,58): Property 'itemsPerRow' does not exist on type 'typeof _TryGunsUI'.
+Script.ts (313,14): Property 'height' does not exist on type 'typeof _TryGunsUI'.
+Script.ts (313,34): Property 'buttonHeight' does not exist on type 'typeof _TryGunsUI'.
+Script.ts (313,60): Property 'itemsPerRow' does not exist on type 'typeof _TryGunsUI'.
+Script.ts (314,14): Property 'registry' does not exist on type 'typeof _TryGunsUI'.
+Script.ts (315,14): Property 'callbackRegistry' does not exist on type 'typeof _TryGunsUI'.
+Script.ts (27,40): Element implicitly has an 'any' type because expression of type '"libModule"' can't be used to index type 'typeof globalThis'.
+  Property 'libModule' does not exist on type 'typeof globalThis'.
+Script.ts (32,40): Element implicitly has an 'any' type because expression of type '"mainModule"' can't be used to index type 'typeof globalThis'.
+  Property 'mainModule' does not exist on type 'typeof globalThis'.
+Script.ts (39,26): Parameter 'player' implicitly has an 'any' type.
+Script.ts (49,29): Parameter 'player' implicitly has an 'any' type.
+Script.ts (53,30): Parameter 'playerId' implicitly has an 'any' type.
+Script.ts (56,17): Property 'state' does not exist on type 'typeof _PlayerState'.
+Script.ts (58,29): Parameter 'player' implicitly has an 'any' type.
+Script.ts (71,25): Parameter 'player' implicitly has an 'any' type.
+Script.ts (71,33): Parameter 'eventOtherPlayer' implicitly has an 'any' type.
+Script.ts (71,51): Parameter 'eventDeathType' implicitly has an 'any' type.
+Script.ts (71,67): Parameter 'eventWeaponUnlock' implicitly has an 'any' type.
+Script.ts (74,34): Parameter 'eventPlayer' implicitly has an 'any' type.
+Script.ts (74,47): Parameter 'eventUIWidget' implicitly has an 'any' type.
+Script.ts (74,62): Parameter 'eventUIButtonEvent' implicitly has an 'any' type.
+Script.ts (78,21): Parameter 'playerId' implicitly has an 'any' type.
+Script.ts (79,32): Property 'state' does not exist on type 'typeof _PlayerState'.
+Script.ts (82,22): Property 'state' does not exist on type 'typeof _PlayerState'.
+Script.ts (86,23): Parameter 'player' implicitly has an 'any' type.
+Script.ts (93,44): Argument of type 'string' is not assignable to parameter of type 'WeaponAttachments'.
+Script.ts (96,34): No overload matches this call.
+  Overload 1 of 7, '(arg0: Player, arg1: Weapons, arg2: WeaponPackage): void', gave the following error.
+    Argument of type 'string' is not assignable to parameter of type 'Weapons'.
+  Overload 2 of 7, '(arg0: Player, arg1: Weapons, arg2: InventorySlots): void', gave the following error.
+    Argument of type 'string' is not assignable to parameter of type 'Weapons'.
+  Overload 3 of 7, '(arg0: Player, arg1: Gadgets, arg2: InventorySlots): void', gave the following error.
+    Argument of type 'string' is not assignable to parameter of type 'Gadgets'.
+Script.ts (100,16): Property 'state' does not exist on type 'typeof _PlayerState'.
+Script.ts (112,19): Parameter 'player' implicitly has an 'any' type.
+Script.ts (115,36): Expected 3 arguments, but got 2.
+Script.ts (116,102): Property 'width' does not exist on type 'typeof _TryGunsUI'.
+Script.ts (116,120): Property 'height' does not exist on type 'typeof _TryGunsUI'.
+Script.ts (117,20): Property 'registry' does not exist on type 'typeof _TryGunsUI'.
+Script.ts (158,17): Argument of type '{ name: unknown; callback: () => void; }[]' is not assignable to parameter of type '{ name: string; callback: () => void; }[]'.
+  Type '{ name: unknown; callback: () => void; }' is not assignable to type '{ name: string; callback: () => void; }'.
+    Types of property 'name' are incompatible.
+      Type 'unknown' is not assignable to type 'string'.
+Script.ts (200,17): Argument of type '{ name: unknown; callback: () => void; }[]' is not assignable to parameter of type '{ name: string; callback: () => void; }[]'.
+  Type '{ name: unknown; callback: () => void; }' is not assignable to type '{ name: string; callback: () => void; }'.
+    Types of property 'name' are incompatible.
+      Type 'unknown' is not assignable to type 'string'.
+Script.ts (225,35): Property 'itemsPerRow' does not exist on type 'typeof _TryGunsUI'.
+Script.ts (226,45): Property 'itemsPerRow' does not exist on type 'typeof _TryGunsUI'.
+Script.ts (226,81): Property 'itemsPerRow' does not exist on type 'typeof _TryGunsUI'.
+Script.ts (229,57): Property 'itemsPerRow' does not exist on type 'typeof _TryGunsUI'.
+Script.ts (230,48): Property 'itemsPerRow' does not exist on type 'typeof _TryGunsUI'.
+Script.ts (231,65): Property 'buttonWidth' does not exist on type 'typeof _TryGunsUI'.
+Script.ts (231,96): Property 'buttonHeight' does not exist on type 'typeof _TryGunsUI'.
+Script.ts (234,79): Property 'buttonWidth' does not exist on type 'typeof _TryGunsUI'.
+Script.ts (234,103): Property 'buttonHeight' does not exist on type 'typeof _TryGunsUI'.
+Script.ts (235,62): Parameter 'player2' implicitly has an 'any' type.
+Script.ts (235,71): Parameter 'eventUIWidget' implicitly has an 'any' type.
+Script.ts (235,86): Parameter 'eventUIButtonEvent' implicitly has an 'any' type.
+Script.ts (239,15): Parameter 'widget' implicitly has an 'any' type.
+Script.ts (254,60): Property 'buttonHeight' does not exist on type 'typeof _TryGunsUI'.
+Script.ts (257,38): Expected 3 arguments, but got 2.
+Script.ts (264,32): Parameter 'name' implicitly has an 'any' type.
+Script.ts (264,38): Parameter 'initialize' implicitly has an 'any' type.
+Script.ts (264,50): Parameter 'setup' implicitly has an 'any' type.
+Script.ts (275,30): Parameter 'player' implicitly has an 'any' type.
+Script.ts (275,38): Parameter 'eventUIWidget' implicitly has an 'any' type.
+Script.ts (275,53): Parameter 'eventUIButtonEvent' implicitly has an 'any' type.
+Script.ts (278,35): Property 'callbackRegistry' does not exist on type 'typeof _TryGunsUI'.
+Script.ts (283,29): Parameter 'player' implicitly has an 'any' type.
+Script.ts (283,37): Parameter 'widgetName' implicitly has an 'any' type.
+Script.ts (283,49): Parameter 'callback' implicitly has an 'any' type.
+Script.ts (285,23): Property 'callbackRegistry' does not exist on type 'typeof _TryGunsUI'.
+Script.ts (286,20): Property 'callbackRegistry' does not exist on type 'typeof _TryGunsUI'.
+Script.ts (288,18): Property 'callbackRegistry' does not exist on type 'typeof _TryGunsUI'.
+Script.ts (290,30): Parameter 'playerId' implicitly has an 'any' type.
+Script.ts (293,31): Parameter 'playerId' implicitly has an 'any' type.
+Script.ts (296,23): Parameter 'playerId' implicitly has an 'any' type.
+Script.ts (296,33): Parameter 'buttonId' implicitly has an 'any' type.
+Script.ts (299,20): Parameter 'playerId' implicitly has an 'any' type.
+Script.ts (304,20): Property 'registry' does not exist on type 'typeof _TryGunsUI'.
+Script.ts (305,20): Property 'callbackRegistry' does not exist on type 'typeof _TryGunsUI'.
+Script.ts (309,14): Property 'buttonHeight' does not exist on type 'typeof _TryGunsUI'.
+Script.ts (310,14): Property 'buttonWidth' does not exist on type 'typeof _TryGunsUI'.
+Script.ts (311,14): Property 'itemsPerRow' does not exist on type 'typeof _TryGunsUI'.
+Script.ts (312,14): Property 'width' does not exist on type 'typeof _TryGunsUI'.
+Script.ts (312,33): Property 'buttonWidth' does not exist on type 'typeof _TryGunsUI'.
+Script.ts (312,58): Property 'itemsPerRow' does not exist on type 'typeof _TryGunsUI'.
+Script.ts (313,14): Property 'height' does not exist on type 'typeof _TryGunsUI'.
+Script.ts (313,34): Property 'buttonHeight' does not exist on type 'typeof _TryGunsUI'.
+Script.ts (313,60): Property 'itemsPerRow' does not exist on type 'typeof _TryGunsUI'.
+Script.ts (314,14): Property 'registry' does not exist on type 'typeof _TryGunsUI'.
+Script.ts (315,14): Property 'callbackRegistry' does not exist on type 'typeof _TryGunsUI'.
