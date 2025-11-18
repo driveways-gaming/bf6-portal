@@ -2921,12 +2921,12 @@ mod.RuntimeSpawn_Common.FX_CarFire_FrameCrawl,
 mod.RuntimeSpawn_Common.FX_CarlGustaf_MK4_Impact,
 mod.RuntimeSpawn_Common.FX_Carrier_Explosion_Dist,
 mod.RuntimeSpawn_Common.FX_Chaingun_30mm_HEDP_Hit,
-// mod.RuntimeSpawn_Common.FX_CIN_MF_Large_Static_Fire,
-// mod.RuntimeSpawn_Common.FX_CIN_MF_Large_Static_VortexFire,
-// mod.RuntimeSpawn_Common.FX_CIN_MF_Medium_Static_Fire,
-// mod.RuntimeSpawn_Common.FX_CIN_MF_Medium_Static_Smoke,
-// mod.RuntimeSpawn_Common.FX_CIN_MF_Small_Static_Fire,
-// mod.RuntimeSpawn_Common.FX_CIN_MF_Small_Static_Smoke,
+mod.RuntimeSpawn_Common.FX_CIN_MF_Large_Static_Fire,
+mod.RuntimeSpawn_Common.FX_CIN_MF_Large_Static_VortexFire,
+mod.RuntimeSpawn_Common.FX_CIN_MF_Medium_Static_Fire,
+mod.RuntimeSpawn_Common.FX_CIN_MF_Medium_Static_Smoke,
+mod.RuntimeSpawn_Common.FX_CIN_MF_Small_Static_Fire,
+mod.RuntimeSpawn_Common.FX_CIN_MF_Small_Static_Smoke,
 mod.RuntimeSpawn_Common.FX_CivCar_SUV_Explosion,
 mod.RuntimeSpawn_Common.FX_CivCar_Tire_fire_S_GS,
 mod.RuntimeSpawn_Common.FX_Decoy_Destruction,
@@ -3114,67 +3114,6 @@ mod.RuntimeSpawn_Common.FX_Impact_SupplyDrop_Sand,
 mod.RuntimeSpawn_Common.FX_Impact_SupplyDrop_Water,
 mod.RuntimeSpawn_Common.FX_Impact_SupplyDrop_Wood,
 mod.RuntimeSpawn_Common.FX_LoadoutCrate_AirSpawn,
-mod.RuntimeSpawn_Common.FX_LoadoutCrate_Drop_Trails,
-mod.RuntimeSpawn_Common.FX_MF_CarlGustaf_MK4_Launch,
-mod.RuntimeSpawn_Common.FX_MF_M320_1P,
-mod.RuntimeSpawn_Common.FX_MF_M320_3P,
-mod.RuntimeSpawn_Common.FX_MF_TRR8_1P,
-mod.RuntimeSpawn_Common.FX_MF_TRR8_3P,
-mod.RuntimeSpawn_Common.FX_Mine_M18_Claymore_Detonation,
-mod.RuntimeSpawn_Common.FX_Mine_M18_Claymore_Laser_Tripwire,
-mod.RuntimeSpawn_Common.FX_Missile_IGLA_Trail,
-mod.RuntimeSpawn_Common.FX_Missile_Javelin,
-mod.RuntimeSpawn_Common.FX_Missile_Javelin_Detonation,
-mod.RuntimeSpawn_Common.FX_Missile_Javelin_Detonation_Underwater,
-mod.RuntimeSpawn_Common.FX_Missile_Javelin_Launch_SmokeTrail,
-mod.RuntimeSpawn_Common.FX_Missile_MBTLAW_Hit,
-mod.RuntimeSpawn_Common.FX_Missile_MBTLAW_Hit_Critical,
-mod.RuntimeSpawn_Common.FX_Missile_MBTLAW_Hit_Glancing,
-mod.RuntimeSpawn_Common.FX_Missile_MBTLAW_Trail,
-mod.RuntimeSpawn_Common.FX_Missile_Stinger_Trail,
-mod.RuntimeSpawn_Common.FX_MortarStrike_Trail,
-mod.RuntimeSpawn_Common.FX_Panzerfaust_Projectile_Stabilizers,
-mod.RuntimeSpawn_Common.FX_ProjectileTrail_BreachingDart,
-mod.RuntimeSpawn_Common.FX_ProjectileTrail_M320_Incendiary,
-mod.RuntimeSpawn_Common.FX_ProjectileTrail_M320_Lethal,
-mod.RuntimeSpawn_Common.FX_ProjectileTrail_M320_NonLethal,
-mod.RuntimeSpawn_Common.FX_ProximityGrenade_Ping_Flash,
-mod.RuntimeSpawn_Common.FX_ProximityGrenade_Trail,
-mod.RuntimeSpawn_Common.FX_RepairTool_FullyHealed,
-mod.RuntimeSpawn_Common.FX_RepairTool_Overheat_1P,
-mod.RuntimeSpawn_Common.FX_RepairTool_Overheat_3P,
-mod.RuntimeSpawn_Common.FX_RepairTool_Sparks_1P,
-mod.RuntimeSpawn_Common.FX_RepairTool_Sparks_3P,
-mod.RuntimeSpawn_Common.FX_RepairTool_Sparks_Damage,
-mod.RuntimeSpawn_Common.FX_RepairTool_Torch_1P,
-mod.RuntimeSpawn_Common.FX_RepairTool_Torch_3P,
-mod.RuntimeSpawn_Common.FX_Rocket_ArmorPiercing_Hit_Metal,
-mod.RuntimeSpawn_Common.FX_Rocket_RPG7V2_Dud,
-mod.RuntimeSpawn_Common.FX_Rocket_RPG7V2_Hit,
-mod.RuntimeSpawn_Common.FX_Rocket_RPG7V2_Hit_Critical,
-mod.RuntimeSpawn_Common.FX_Rocket_RPG7V2_Hit_Glancing,
-mod.RuntimeSpawn_Common.FX_Rocket_RPG7V2_Trail,
-mod.RuntimeSpawn_Common.FX_Rocket_RPG7V2_Trail_SP,
-mod.RuntimeSpawn_Common.FX_ShellEjection_DP12_12g_Buckshot,
-mod.RuntimeSpawn_Common.FX_Smoke_Marker_Custom,
-mod.RuntimeSpawn_Common.FX_SoldierScreen_HealingStarted,
-mod.RuntimeSpawn_Common.FX_SP_Glint_Collectable,
-mod.RuntimeSpawn_Common.FX_Sparks,
-mod.RuntimeSpawn_Common.FX_SupplyVehicleStation_Range_Indicator,
-mod.RuntimeSpawn_Common.FX_ThrowingKnife_Trail,
-mod.RuntimeSpawn_Common.FX_ThrowingKnife_Trail_Friendly,
-mod.RuntimeSpawn_Common.FX_TracerDart_Projectile_Glow,
-mod.RuntimeSpawn_Common.FX_Vehicle_Car_Destruction_Death_Explosion_PTV,
-mod.RuntimeSpawn_Common.FX_Vehicle_CriticalState_PTV,
-mod.RuntimeSpawn_Common.FX_Vehicle_Damage_PTV_Critical,
-mod.RuntimeSpawn_Common.FX_Vehicle_Damage_PTV_Heavy,
-mod.RuntimeSpawn_Common.FX_Vehicle_Damage_PTV_Light,
-mod.RuntimeSpawn_Common.FX_Vehicle_InstSpec_Drone_Explosion,
-mod.RuntimeSpawn_Common.FX_Vehicle_PTV_WheelTracks_GroundDecal,
-mod.RuntimeSpawn_Common.FX_Vehicle_Sabotage_Sequence,
-mod.RuntimeSpawn_Common.FX_Vehicle_Wreck_PTV,
-mod.RuntimeSpawn_Common.FX_Vehicle_Wreck_PTV_Calm,
-mod.RuntimeSpawn_Common.FX_WireGuidedMissile_SpooledWire,
 ];
 
 class VFX {
@@ -3458,34 +3397,39 @@ class VFXDemo {
     lastFireTick: number;
     fireInterval: number;
     textWidget: mod.UIWidget | undefined;
+    customDisplayText: CustomDisplayText | undefined;
     mannequin: mod.SpatialObject | undefined;
+    vfxMap: Map<string, mod.RuntimeSpawn_Common>;
+    vfxKeys: string[];
     constructor(spawnLocation: Driveways.Physics.Vec3, fireInterval: number) {
         this.spawnLocation = spawnLocation;
         this.lastVfxIndex = 0;
         this.lastFireTick = 0;
         this.fireInterval = fireInterval;
-
+        this.vfxMap = GetCommonVFX();
+        this.vfxKeys = Array.from(this.vfxMap.keys());
         const displayTestName = "vfx_demo_display";
         const existing = mod.FindUIWidgetWithName(displayTestName);
         if (existing) {
             mod.DeleteUIWidget(existing);
         }
-        this.textWidget = modlib.ParseUI({
-            type: "Text",
-            name: displayTestName,
-            position: [0, 400],
-            size: [1400, 200],
-            anchor: mod.UIAnchor.Center,
-            visible: true,
-            bgColor: [0,0,0],
-            bgAlpha: 0.8,
-            bgFill: mod.UIBgFill.Solid,
-            textLabel: "",
-            textColor: [1, 1, 1],
-            textAlpha: 1,
-            textSize: 48,
-            textAnchor: mod.UIAnchor.Center,
-        });
+        // this.textWidget = modlib.ParseUI({
+        //     type: "Text",
+        //     name: displayTestName,
+        //     position: [0, 400],
+        //     size: [1400, 200],
+        //     anchor: mod.UIAnchor.Center,
+        //     visible: true,
+        //     bgColor: [0,0,0],
+        //     bgAlpha: 0.8,
+        //     bgFill: mod.UIBgFill.Solid,
+        //     textLabel: "",
+        //     textColor: [1, 1, 1],
+        //     textAlpha: 1,
+        //     textSize: 48,
+        //     textAnchor: mod.UIAnchor.Center,
+        // });
+        this.customDisplayText = new CustomDisplayText(displayTestName, [0, 400]);
         this.mannequin = mod.SpawnObject(mod.RuntimeSpawn_Common.Basketball_01, this.spawnLocation.toModVector(), mod.CreateVector(0, 0, 0));
     }
 
@@ -3507,28 +3451,37 @@ class VFXDemo {
         let vfxIndex = this.lastVfxIndex + 1;
         vfxIndex %= explosionsVFX.length;
         this.lastVfxIndex = vfxIndex;
-        if (this.textWidget) {
-            const explosion = explosionsVFX[vfxIndex];
-            Driveways.Metrics.record('vfx_demo_string_key_length_0', explosion.toString().length);
-            // const explosionString = mod.stringkeys[explosion as keyof typeof mod.stringkeys];
-            const explosionString = GetVFXName(explosion);
-            Driveways.Metrics.record('vfx_demo_string_key_length_1', explosionString.length);
-            Log("Explosion string: " + explosionString + " " + explosion);
-            if (explosionString) {
-                Driveways.Metrics.record('vfx_demo_string_key_has', 1);
-                // const str = mod.stringkeys.get(explosion);
-                const str = explosionString;
-                Log("Explosion string: " + str + " " + explosion);
-                Driveways.Metrics.record('vfx_demo_string_key_length', explosion.toString().length);
-                Driveways.Metrics.record('vfx_demo_string_length', str.length);
-                mod.SetUITextLabel(this.textWidget, mod.Message(explosionString));
-            } else {
-                Driveways.Metrics.record('vfx_demo_string_key_has', 0);
-                Error("Explosion not found");
+        // const explosion = explosionsVFX[vfxIndex];
+        const vfxKey = this.vfxKeys[vfxIndex];
+        const explosion = this.vfxMap.get(vfxKey);
+        if (!explosion) {
+            Error("VFX not found");
+            return;
+        }
+
+        Driveways.Metrics.record('vfx_demo_string_key_length_0', explosion.toString().length);
+        // const explosionString = mod.stringkeys[explosion as keyof typeof mod.stringkeys];
+        const explosionString = vfxKey;
+        Driveways.Metrics.record('vfx_demo_string_key_length_1', explosionString.length);
+        Log("Explosion string: " + explosionString + " " + explosion);
+        if (explosionString) {
+            Driveways.Metrics.record('vfx_demo_string_key_has', 1);
+            // const str = mod.stringkeys.get(explosion);
+            const str = explosionString;
+            Log("Explosion string: " + str + " " + explosion);
+            Driveways.Metrics.record('vfx_demo_string_key_length', explosion.toString().length);
+            Driveways.Metrics.record('vfx_demo_string_length', str.length);
+            // mod.SetUITextLabel(this.textWidget, mod.Message(explosionString));
+            if (this.customDisplayText) {
+                this.customDisplayText.destroy();
             }
+            this.customDisplayText = new CustomDisplayText(explosionString, [-400, 400]);
+        } else {
+            Driveways.Metrics.record('vfx_demo_string_key_has', 0);
+            Error("Explosion not found");
         }
         Driveways.Metrics.accumulate('vfx_demo_spawns_internal', 1);
-        VFXSpawner.spawnVFX(explosionsVFX[vfxIndex], this.spawnLocation, 3000);
+        VFXSpawner.spawnVFX(explosion, this.spawnLocation, 3000);
         Driveways.Metrics.increment('vfx_demo_spawns');
     }
     moveTo(newPosition: Driveways.Physics.Vec3) {
@@ -3539,6 +3492,22 @@ class VFXDemo {
     }
 }
 
+function GetCommonVFX(): Map<string, mod.RuntimeSpawn_Common> {
+    const vfxMap = new Map<string, mod.RuntimeSpawn_Common>();
+    for (const vfxKey of Object.keys(mod.RuntimeSpawn_Common)) {
+        if (typeof vfxKey === 'string' && vfxKey in mod.RuntimeSpawn_Common && vfxKey.startsWith("FX_")) {
+            const vfx = mod.RuntimeSpawn_Common[vfxKey as keyof typeof mod.RuntimeSpawn_Common];
+            if (vfx) {
+                vfxMap.set(vfxKey, vfx);
+            }
+        }
+    }
+    return vfxMap;
+}
+const vfxList = GetCommonVFX();
+for (const vfxKey of vfxList.keys()) {
+    Log("VFX: " + vfxKey);
+}
 
 function GetVFXName(vfx: mod.RuntimeSpawn_Common): string {
     const stringkey = GetVFXEnumString(vfx);
@@ -3555,4 +3524,53 @@ function GetVFXEnumString(vfxIncoming: mod.RuntimeSpawn_Common): string {
         }
     }
     return "vfx_unknown";
+}
+
+class CustomDisplayText {
+    text: string;
+    textWidgets: mod.UIWidget[] = [];
+    constructor(text: string, position: number[]) {
+        this.text = text;
+        let index = 0;
+        for (const character of text) {
+            const textName = "custom_display_text_" + index + "_" + character;
+            const existing = mod.FindUIWidgetWithName(textName);
+            if (existing) {
+                mod.DeleteUIWidget(existing);
+            }
+            const textWidget = modlib.ParseUI({
+                type: "Text",
+                name: textName,
+                position: [position[0] + CustomDisplayText.charWidth(character) * index, position[1]],
+                size: [30, 300],
+                anchor: mod.UIAnchor.Center,
+                visible: true,
+                bgColor: [0, 0, 0],
+                bgAlpha: 1,
+                bgFill: mod.UIBgFill.Solid,
+                textLabel: mod.Message(character),
+                textColor: [1, 1, 1],
+                textAlpha: 1,
+                textSize: 48,
+                textAnchor: mod.UIAnchor.Center,
+            });
+            if (textWidget) {
+                this.textWidgets.push(textWidget);
+            } else {
+                Error("Failed to create text widget");
+            }
+            index++;
+        }
+    }
+    destroy() {
+        for (const textWidget of this.textWidgets) {
+            if (textWidget) {
+                mod.DeleteUIWidget(textWidget);
+            }
+        }
+        this.textWidgets = [];
+    }
+    static charWidth(character: string): number {
+        return 30;
+    }
 }
