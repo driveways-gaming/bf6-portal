@@ -2576,12 +2576,15 @@ function PlayerUIButtons(player: mod.Player) {
       }, mod.Message((rotationMask + zMask) * -1));
 
       Driveways.DynamicUI.registerButton(mod.GetObjId(player), "start_vfx_demo", () => {
-        vfxDemo = new VFXDemo(new Driveways.Physics.Vec3(-200, 385, 353), 120);
+        vfxDemo = new VFXDemo(new Driveways.Physics.Vec3(-200, 385, 353), 300);
+        vfxDemo.registerButtons(player);
         if (viewingPlatform) {
             vfxDemo.moveTo(viewingPlatform.position);
+            viewingPlatform.reposition();
         }
         //     viewingPlatform = new ViewingPlatform(new Driveways.Physics.Vec3(-200, 385, 353));
     }, mod.Message(9000));
+    vfxDemo?.registerButtons(player);
 }
 
 let initialPlayerPosition: mod.Vector | null = null;
@@ -2864,258 +2867,6 @@ class VFXSpawner {
     }
 }
 
-
-const explosionsVFX: mod.RuntimeSpawn_Common[] = [
-mod.RuntimeSpawn_Common.FX_Airburst_Incendiary_Detonation,
-mod.RuntimeSpawn_Common.FX_Airburst_Incendiary_Detonation_Friendly,
-mod.RuntimeSpawn_Common.FX_Airplane_Jetwash_Dirt,
-mod.RuntimeSpawn_Common.FX_Airplane_Jetwash_Grass,
-mod.RuntimeSpawn_Common.FX_Airplane_Jetwash_Sand,
-mod.RuntimeSpawn_Common.FX_Airplane_Jetwash_Snow,
-mod.RuntimeSpawn_Common.FX_Airplane_Jetwash_Water,
-mod.RuntimeSpawn_Common.fx_ambwar_artillarystrike,
-mod.RuntimeSpawn_Common.FX_AmbWar_UAV_Circling,
-mod.RuntimeSpawn_Common.FX_ArtilleryStrike_Explosion_01,
-mod.RuntimeSpawn_Common.FX_ArtilleryStrike_Explosion_GS,
-mod.RuntimeSpawn_Common.FX_ArtilleryStrike_Explosion_GS_SP_Beach,
-mod.RuntimeSpawn_Common.FX_Autocannon_30mm_AP_Hit_GS,
-mod.RuntimeSpawn_Common.FX_Autocannon_30mm_AP_Hit_Metal_GS,
-mod.RuntimeSpawn_Common.FX_AW_Distant_Cluster_Bomb_Line_Outskirts,
-mod.RuntimeSpawn_Common.FX_BASE_Birds_Black_Circulating,
-mod.RuntimeSpawn_Common.FX_BASE_DeployClouds_Var_A,
-mod.RuntimeSpawn_Common.FX_BASE_DeployClouds_Var_B,
-mod.RuntimeSpawn_Common.FX_BASE_Dust_Large_Area,
-mod.RuntimeSpawn_Common.FX_BASE_Fire_L,
-mod.RuntimeSpawn_Common.FX_BASE_Fire_M,
-mod.RuntimeSpawn_Common.FX_BASE_Fire_M_NoSmoke,
-mod.RuntimeSpawn_Common.FX_BASE_Fire_Oil_Medium,
-mod.RuntimeSpawn_Common.FX_BASE_Fire_S,
-mod.RuntimeSpawn_Common.FX_BASE_Fire_S_NoSmoke,
-mod.RuntimeSpawn_Common.FX_BASE_Fire_XL,
-mod.RuntimeSpawn_Common.FX_BASE_Flies_Small,
-mod.RuntimeSpawn_Common.FX_BASE_Seagull_Flock,
-mod.RuntimeSpawn_Common.FX_BASE_Smoke_Column_XXL,
-mod.RuntimeSpawn_Common.FX_BASE_Smoke_Dark_M,
-mod.RuntimeSpawn_Common.FX_BASE_Smoke_Pillar_Black_L,
-mod.RuntimeSpawn_Common.FX_BASE_Smoke_Pillar_Black_L_Dist,
-mod.RuntimeSpawn_Common.FX_BASE_Smoke_Pillar_White_L,
-mod.RuntimeSpawn_Common.FX_BASE_Smoke_Soft_S_GS,
-mod.RuntimeSpawn_Common.FX_BASE_Sparks_Pulse_L,
-mod.RuntimeSpawn_Common.FX_BD_Huge_Horizon_Exp,
-mod.RuntimeSpawn_Common.FX_BD_Med_Horizon_Exp,
-mod.RuntimeSpawn_Common.FX_BD_Med_Horizon_Exp_Multi,
-mod.RuntimeSpawn_Common.FX_Blackhawk_Rotor_HaloGlow,
-mod.RuntimeSpawn_Common.FX_Blackhawk_Rotor_Vortex_Vapor,
-mod.RuntimeSpawn_Common.FX_BlackLocust_Tree_Branch_L_GS,
-mod.RuntimeSpawn_Common.FX_Bomb_Mk82_AIR_Detonation,
-mod.RuntimeSpawn_Common.FX_Bomb_Mk82_AIR_Trail_Ballute_AirStrike,
-mod.RuntimeSpawn_Common.FX_BreachingDart_Breach_Detonation,
-mod.RuntimeSpawn_Common.FX_BreachingDart_Generic_BreachthroughSmoke,
-mod.RuntimeSpawn_Common.FX_BreachingDart_NoBreach_Detonation,
-mod.RuntimeSpawn_Common.FX_Building_FallingDustSand,
-mod.RuntimeSpawn_Common.FX_Bullet_L_Vegetation_DeadLeaves_PropDest,
-mod.RuntimeSpawn_Common.FX_CAP_AmbWar_Rocket_Strike,
-mod.RuntimeSpawn_Common.FX_Car_Fire_M_GS,
-mod.RuntimeSpawn_Common.FX_CarFire_Bumper_01,
-mod.RuntimeSpawn_Common.FX_CarFire_FrameCrawl,
-mod.RuntimeSpawn_Common.FX_CarlGustaf_MK4_Impact,
-mod.RuntimeSpawn_Common.FX_Carrier_Explosion_Dist,
-mod.RuntimeSpawn_Common.FX_Chaingun_30mm_HEDP_Hit,
-mod.RuntimeSpawn_Common.FX_CIN_MF_Large_Static_Fire,
-mod.RuntimeSpawn_Common.FX_CIN_MF_Large_Static_VortexFire,
-mod.RuntimeSpawn_Common.FX_CIN_MF_Medium_Static_Fire,
-mod.RuntimeSpawn_Common.FX_CIN_MF_Medium_Static_Smoke,
-mod.RuntimeSpawn_Common.FX_CIN_MF_Small_Static_Fire,
-mod.RuntimeSpawn_Common.FX_CIN_MF_Small_Static_Smoke,
-mod.RuntimeSpawn_Common.FX_CivCar_SUV_Explosion,
-mod.RuntimeSpawn_Common.FX_CivCar_Tire_fire_S_GS,
-mod.RuntimeSpawn_Common.FX_Decoy_Destruction,
-mod.RuntimeSpawn_Common.FX_Defib_Shock_Heal_Full,
-mod.RuntimeSpawn_Common.FX_Defib_Shock_Heal_Half,
-mod.RuntimeSpawn_Common.FX_Defib_Shock_Hurt_Full,
-mod.RuntimeSpawn_Common.FX_Defib_Shock_Hurt_Half,
-mod.RuntimeSpawn_Common.FX_DeployableCover_Deploy_Dirt,
-mod.RuntimeSpawn_Common.FX_DeployableCover_Destruction,
-mod.RuntimeSpawn_Common.FX_EODBot_Active_Enemy,
-mod.RuntimeSpawn_Common.FX_EODBot_Active_Friendly,
-mod.RuntimeSpawn_Common.FX_EODBot_RepairTool_Torch_1P,
-mod.RuntimeSpawn_Common.FX_EODBot_RepairTool_Torch_3P,
-mod.RuntimeSpawn_Common.FX_Gadget_AdrenalineShot,
-mod.RuntimeSpawn_Common.FX_Gadget_AirburstLauncher_Detonation,
-mod.RuntimeSpawn_Common.FX_Gadget_AirburstLauncher_Predicted_Line,
-mod.RuntimeSpawn_Common.FX_Gadget_AirburstLauncher_Predicted_Point,
-mod.RuntimeSpawn_Common.FX_Gadget_AirburstLauncher_Predicted_Point_GroundConnect,
-mod.RuntimeSpawn_Common.FX_Gadget_AmmoCrate_Area,
-mod.RuntimeSpawn_Common.FX_Gadget_AT_Mine_Detonation,
-mod.RuntimeSpawn_Common.FX_Gadget_AT4_Launch_1P,
-mod.RuntimeSpawn_Common.FX_Gadget_AT4_Launch_3P,
-mod.RuntimeSpawn_Common.FX_Gadget_AT4_Projectile_Trail,
-mod.RuntimeSpawn_Common.FX_Gadget_Binoculars_ScopeGlint,
-mod.RuntimeSpawn_Common.FX_Gadget_C4_Explosives_Detonation,
-mod.RuntimeSpawn_Common.FX_Gadget_C4_Explosives_Detonation_Underwater,
-mod.RuntimeSpawn_Common.FX_Gadget_Defib_LED,
-mod.RuntimeSpawn_Common.FX_Gadget_Defib_Recharge_LED,
-mod.RuntimeSpawn_Common.FX_Gadget_DeployableMortar_Destruction,
-mod.RuntimeSpawn_Common.FX_Gadget_DeployableMortar_Detonation,
-mod.RuntimeSpawn_Common.FX_Gadget_DeployableMortar_Detonation_Underwater,
-mod.RuntimeSpawn_Common.FX_Gadget_DeployableMortar_FireEffect_1P,
-mod.RuntimeSpawn_Common.FX_Gadget_DeployableMortar_FireEffect_3P,
-mod.RuntimeSpawn_Common.FX_Gadget_DeployableMortar_Projectile_Trail,
-mod.RuntimeSpawn_Common.FX_Gadget_DeployableMortar_Target_Area,
-mod.RuntimeSpawn_Common.FX_Gadget_Drone_Destruction,
-mod.RuntimeSpawn_Common.FX_Gadget_Drone_NavLights,
-mod.RuntimeSpawn_Common.FX_Gadget_Drone_OutOfRange_Distortion,
-mod.RuntimeSpawn_Common.FX_Gadget_Drone_ThermalVE,
-mod.RuntimeSpawn_Common.FX_Gadget_EIDOS_Active,
-mod.RuntimeSpawn_Common.FX_Gadget_EIDOS_Destruction,
-mod.RuntimeSpawn_Common.FX_Gadget_EIDOS_Intercept_Detonation,
-mod.RuntimeSpawn_Common.FX_Gadget_EIDOS_Lights_Active,
-mod.RuntimeSpawn_Common.FX_Gadget_EIDOS_Lights_Standby,
-mod.RuntimeSpawn_Common.FX_Gadget_EIDOS_Projectile_Launch,
-mod.RuntimeSpawn_Common.FX_Gadget_EIDOS_Standby,
-mod.RuntimeSpawn_Common.FX_Gadget_EODBot_Clusterbomb_Separation,
-mod.RuntimeSpawn_Common.FX_Gadget_EODBot_ClusterFragmentCharge_Detonation,
-mod.RuntimeSpawn_Common.FX_Gadget_EODBot_Destruction,
-mod.RuntimeSpawn_Common.FX_Gadget_EODBot_ObjectiveInteraction,
-mod.RuntimeSpawn_Common.FX_Gadget_Generic_Destruction,
-mod.RuntimeSpawn_Common.FX_Gadget_Generic_Destruction_Electronic,
-mod.RuntimeSpawn_Common.FX_Gadget_Generic_Tripod_Destruction,
-mod.RuntimeSpawn_Common.FX_Gadget_IGLA_Launch_1P,
-mod.RuntimeSpawn_Common.FX_Gadget_IGLA_Launch_3P,
-mod.RuntimeSpawn_Common.FX_Gadget_InterativeSpectator_Camera_Light_Green,
-mod.RuntimeSpawn_Common.FX_Gadget_InterativeSpectator_Camera_Light_Red,
-mod.RuntimeSpawn_Common.FX_Gadget_InterativeSpectator_Camera_Light_Yellow,
-mod.RuntimeSpawn_Common.FX_Gadget_IntSpec_Drone_Damage_Heavy,
-mod.RuntimeSpawn_Common.FX_Gadget_IntSpec_Drone_Damage_Light,
-mod.RuntimeSpawn_Common.FX_Gadget_Javelin_Launch_1P,
-mod.RuntimeSpawn_Common.FX_Gadget_Javelin_Launch_3P,
-mod.RuntimeSpawn_Common.FX_Gadget_M320_Reload_ShellCasing,
-mod.RuntimeSpawn_Common.FX_Gadget_M320_Reload_Smoke,
-mod.RuntimeSpawn_Common.FX_Gadget_M4_SLAM_Detonation,
-mod.RuntimeSpawn_Common.FX_Gadget_MBTLAW_Launch_1P,
-mod.RuntimeSpawn_Common.FX_Gadget_MBTLAW_Launch_3P,
-mod.RuntimeSpawn_Common.FX_Gadget_Mine_AT_Warning_Light,
-mod.RuntimeSpawn_Common.FX_Gadget_MobileRespawn_Damaged,
-mod.RuntimeSpawn_Common.FX_Gadget_MPAPS_Active,
-mod.RuntimeSpawn_Common.FX_Gadget_MPAPS_Destruction,
-mod.RuntimeSpawn_Common.FX_Gadget_MPAPS_Intercept_Detonation,
-mod.RuntimeSpawn_Common.FX_Gadget_MPAPS_Lights_Active,
-mod.RuntimeSpawn_Common.FX_Gadget_MPAPS_Lights_Standby,
-mod.RuntimeSpawn_Common.FX_Gadget_MPAPS_Projectile_Launch,
-mod.RuntimeSpawn_Common.FX_Gadget_MPAPS_Standby,
-mod.RuntimeSpawn_Common.FX_Gadget_PTKM_EFP_Hit,
-mod.RuntimeSpawn_Common.FX_Gadget_PTKM_EFP_Trail,
-mod.RuntimeSpawn_Common.FX_Gadget_PTKM_Mine_Launch,
-mod.RuntimeSpawn_Common.FX_Gadget_PTKM_Submunition_Detonation,
-mod.RuntimeSpawn_Common.FX_Gadget_PTKM_Submunition_Trail,
-mod.RuntimeSpawn_Common.FX_Gadget_ReconDrone_EMP_Hit,
-mod.RuntimeSpawn_Common.FX_Gadget_ReconDrone_EMP_Weapon_Fire,
-mod.RuntimeSpawn_Common.FX_Gadget_ReconDrone_Light,
-mod.RuntimeSpawn_Common.FX_Gadget_ReconDrone_OutOfRange_Distortion,
-mod.RuntimeSpawn_Common.FX_Gadget_RemoteTurret_Box_Damage,
-mod.RuntimeSpawn_Common.FX_Gadget_RemoteTurret_Box_Damage_Top,
-mod.RuntimeSpawn_Common.FX_Gadget_RemoteTurret_Box_WreckState,
-mod.RuntimeSpawn_Common.FX_Gadget_RemoteTurret_Damage_Light,
-mod.RuntimeSpawn_Common.FX_Gadget_RemoteTurret_ScreenEffect_Damage,
-mod.RuntimeSpawn_Common.FX_Gadget_RemoteTurret_Smoke_Open,
-mod.RuntimeSpawn_Common.FX_Gadget_RPG7V2_Launch_1P,
-mod.RuntimeSpawn_Common.FX_Gadget_RPG7V2_Launch_3P,
-mod.RuntimeSpawn_Common.FX_Gadget_Sabotage_01_StartSparks,
-mod.RuntimeSpawn_Common.FX_Gadget_Sabotage_02_SparkLoop,
-mod.RuntimeSpawn_Common.FX_Gadget_Sabotage_02_SparkLoop_SidePannel,
-mod.RuntimeSpawn_Common.FX_Gadget_Sabotage_03_Fizzle,
-mod.RuntimeSpawn_Common.FX_Gadget_ScreenEffect_Thermal_BHOT,
-mod.RuntimeSpawn_Common.FX_Gadget_ScreenEffect_Thermal_WHOT,
-mod.RuntimeSpawn_Common.FX_Gadget_SmokeBarrage_AirBurst_Det,
-mod.RuntimeSpawn_Common.FX_Gadget_SmokeBarrage_Cluster_Det,
-mod.RuntimeSpawn_Common.FX_Gadget_SmokeBarrage_Cluster_Light1,
-mod.RuntimeSpawn_Common.FX_Gadget_SmokeBarrage_Cluster_Trail,
-mod.RuntimeSpawn_Common.FX_Gadget_SmokeBarrage_Cluster_VE,
-mod.RuntimeSpawn_Common.FX_Gadget_SniperDecoy_Destruction,
-mod.RuntimeSpawn_Common.FX_Gadget_SniperDecoy_LensFlare,
-mod.RuntimeSpawn_Common.FX_Gadget_SpawnBeacon_Active,
-mod.RuntimeSpawn_Common.FX_Gadget_SpawnBeacon_Destruction,
-mod.RuntimeSpawn_Common.FX_Gadget_StickyGrenade_Detonation,
-mod.RuntimeSpawn_Common.FX_Gadget_Stinger_Launch_1P,
-mod.RuntimeSpawn_Common.FX_Gadget_Stinger_Launch_3P,
-mod.RuntimeSpawn_Common.FX_Gadget_SupplyCrate_Destruction,
-mod.RuntimeSpawn_Common.FX_Gadget_SupplyCrate_Range_Indicator,
-mod.RuntimeSpawn_Common.FX_Gadget_SupplyCrate_Range_Indicator_Upgraded,
-mod.RuntimeSpawn_Common.FX_Gadget_SupplyDrop_Destruction,
-mod.RuntimeSpawn_Common.FX_Gadget_Trophy_Range_Indicator,
-mod.RuntimeSpawn_Common.FX_Gadget_TUGS_Active,
-mod.RuntimeSpawn_Common.FX_Gadget_TUGS_Destruction,
-mod.RuntimeSpawn_Common.FX_Gadget_VehicleRessuplyCrate_Destruction,
-mod.RuntimeSpawn_Common.FX_Gadget_VehicleSupplyCrate_Range_Indicator,
-mod.RuntimeSpawn_Common.FX_Gadget_VehicleSupplyCrate_Range_Indicator_Upgraded,
-mod.RuntimeSpawn_Common.FX_Granite_Strike_Smoke_Marker_Green,
-mod.RuntimeSpawn_Common.FX_Granite_Strike_Smoke_Marker_Red,
-mod.RuntimeSpawn_Common.FX_Granite_Strike_Smoke_Marker_Violet,
-mod.RuntimeSpawn_Common.FX_Granite_Strike_Smoke_Marker_Yellow,
-mod.RuntimeSpawn_Common.FX_Grenade_40mm_AT_Detonation,
-mod.RuntimeSpawn_Common.FX_Grenade_40mm_HE_Detonation,
-mod.RuntimeSpawn_Common.FX_Grenade_40mm_HE_Detonation_Underwater,
-mod.RuntimeSpawn_Common.FX_Grenade_40mm_Thermobaric_Detonation,
-mod.RuntimeSpawn_Common.FX_Grenade_AntiTank_Detonation,
-mod.RuntimeSpawn_Common.FX_Grenade_AntiTank_Trail,
-mod.RuntimeSpawn_Common.FX_Grenade_BreachingDart_Stuck,
-mod.RuntimeSpawn_Common.FX_Grenade_BreachingDart_Trail_Flashbang,
-mod.RuntimeSpawn_Common.FX_Grenade_BreachingDartFlashbang_BurnIn_ScreenEffect,
-mod.RuntimeSpawn_Common.FX_Grenade_BreachingDartFlashbang_Detonation,
-mod.RuntimeSpawn_Common.FX_Grenade_Concussion_Detonation,
-mod.RuntimeSpawn_Common.FX_Grenade_Concussion_ScreenEffect,
-mod.RuntimeSpawn_Common.FX_Grenade_Flashbang_BurnIn_ScreenEffect,
-mod.RuntimeSpawn_Common.FX_Grenade_Flashbang_Detonation,
-mod.RuntimeSpawn_Common.FX_Grenade_Flashbang_ScreenEffect,
-mod.RuntimeSpawn_Common.FX_Grenade_Fragmentation_Detonation,
-mod.RuntimeSpawn_Common.FX_Grenade_Fragmentation_Detonation_Underwater,
-mod.RuntimeSpawn_Common.FX_Grenade_Fragmentation_ImpactGrenade_Detonation,
-mod.RuntimeSpawn_Common.FX_Grenade_Fragmentation_MiniV40_Detonation,
-mod.RuntimeSpawn_Common.FX_Grenade_Fragmentation_Trail,
-mod.RuntimeSpawn_Common.FX_Grenade_Incendiary_Detonation,
-mod.RuntimeSpawn_Common.FX_Grenade_Incendiary_Trail,
-mod.RuntimeSpawn_Common.FX_Grenade_M67_Fragmentation_Trail,
-mod.RuntimeSpawn_Common.FX_Grenade_M84_Flashbang_Trail,
-mod.RuntimeSpawn_Common.FX_Grenade_MK32A_Concussion_Trail,
-mod.RuntimeSpawn_Common.FX_Grenade_RGO_Impact_Trail,
-mod.RuntimeSpawn_Common.FX_Grenade_SignalSmoke,
-mod.RuntimeSpawn_Common.FX_Grenade_SignalSmoke_INV,
-mod.RuntimeSpawn_Common.FX_Grenade_Smoke_Detonation,
-mod.RuntimeSpawn_Common.FX_Grenade_Smoke_Detonation_Upgraded,
-mod.RuntimeSpawn_Common.FX_Grenade_Smoke_Disarmed,
-mod.RuntimeSpawn_Common.FX_Grenade_Smoke_Explosion_High_Wind,
-mod.RuntimeSpawn_Common.FX_Grenade_Smoke_Trail,
-mod.RuntimeSpawn_Common.FX_Grenadelauncher_SmokeGL_Smoke,
-mod.RuntimeSpawn_Common.FX_Impact_LoadoutCrate_Bricks,
-mod.RuntimeSpawn_Common.FX_Impact_LoadoutCrate_Dirt,
-mod.RuntimeSpawn_Common.FX_Impact_LoadoutCrate_Generic,
-mod.RuntimeSpawn_Common.FX_Impact_LoadoutCrate_Metal,
-mod.RuntimeSpawn_Common.FX_Impact_LoadoutCrate_Mud,
-mod.RuntimeSpawn_Common.FX_Impact_LoadoutCrate_Sand,
-mod.RuntimeSpawn_Common.FX_Impact_LoadoutCrate_Stone,
-mod.RuntimeSpawn_Common.FX_Impact_LoadoutCrate_Wood,
-mod.RuntimeSpawn_Common.FX_Impact_LootCrate_Dirt,
-mod.RuntimeSpawn_Common.FX_Impact_LootCrate_Generic,
-mod.RuntimeSpawn_Common.FX_Impact_SafeImpact_Brick,
-mod.RuntimeSpawn_Common.FX_Impact_SafeImpact_Dirt,
-mod.RuntimeSpawn_Common.FX_Impact_SafeImpact_Generic,
-mod.RuntimeSpawn_Common.FX_Impact_SafeImpact_Gravel,
-mod.RuntimeSpawn_Common.FX_Impact_SafeImpact_Metal,
-mod.RuntimeSpawn_Common.FX_Impact_SafeImpact_Mud,
-mod.RuntimeSpawn_Common.FX_Impact_SafeImpact_Sand,
-mod.RuntimeSpawn_Common.FX_Impact_SafeImpact_Water,
-mod.RuntimeSpawn_Common.FX_Impact_SafeImpact_Wood,
-mod.RuntimeSpawn_Common.FX_Impact_SupplyDrop_Brick,
-mod.RuntimeSpawn_Common.FX_Impact_SupplyDrop_Dirt,
-mod.RuntimeSpawn_Common.FX_Impact_SupplyDrop_Gravel,
-mod.RuntimeSpawn_Common.FX_Impact_Supplydrop_Metal,
-mod.RuntimeSpawn_Common.FX_Impact_SupplyDrop_Mud,
-mod.RuntimeSpawn_Common.FX_Impact_SupplyDrop_Sand,
-mod.RuntimeSpawn_Common.FX_Impact_SupplyDrop_Water,
-mod.RuntimeSpawn_Common.FX_Impact_SupplyDrop_Wood,
-mod.RuntimeSpawn_Common.FX_LoadoutCrate_AirSpawn,
-];
-
 class VFX {
     static makeABoom(position: Driveways.Physics.Vec3) {
         VFXSpawner.spawnVFX(mod.RuntimeSpawn_Common.FX_Grenade_Fragmentation_Detonation, position, 1000);
@@ -3170,108 +2921,108 @@ function GetPerformanceRatio(): number {
     return performanceRatio;
 }
 
-class VFXTestGrid {
-    origin: Driveways.Physics.Vec3;
-    numRows: number;
-    numCols: number;
-    spacing: number;
-    markerObject: mod.SpatialObject;
-    vfxOffset: number;
-    constructor(origin: Driveways.Physics.Vec3, numRows: number, numCols: number, spacing: number) {
-        this.origin = origin;
-        this.numRows = numRows;
-        this.numCols = numCols;
-        this.spacing = spacing;
-        this.markerObject = mod.SpawnObject(mod.RuntimeSpawn_Common.BarrierStoneBlock_01_A, origin.toModVector(), mod.CreateVector(0, 0, 0), mod.CreateVector(1, 1, 1));
-        this.vfxOffset = 0;
-    }
-    makeBooms() {
-        mod.SetObjectTransform(this.markerObject, mod.CreateTransform(this.origin.toModVector(), mod.CreateVector(0, 0, 0)));
-        for (let row = 0; row < this.numRows; row++) {
-            for (let col = 0; col < this.numCols; col++) {
-                const position = new Driveways.Physics.Vec3(this.origin.x + col * this.spacing, this.origin.y + row * this.spacing, this.origin.z);
-                // VFX.makeABoom(position);
-                let index = (this.vfxOffset + row * this.numCols + col) % explosionsVFX.length;
-                VFXSpawner.spawnVFX(explosionsVFX[index], position, 1000);
-            }
-        }
-    }
-    public moveOriginForward(distance: number) {
-        this.origin.z += distance;
-    }
-    public nextVFX() {
-        this.vfxOffset++;
-        this.vfxOffset %= explosionsVFX.length;
-    }
-}
+// class VFXTestGrid {
+//     origin: Driveways.Physics.Vec3;
+//     numRows: number;
+//     numCols: number;
+//     spacing: number;
+//     markerObject: mod.SpatialObject;
+//     vfxOffset: number;
+//     constructor(origin: Driveways.Physics.Vec3, numRows: number, numCols: number, spacing: number) {
+//         this.origin = origin;
+//         this.numRows = numRows;
+//         this.numCols = numCols;
+//         this.spacing = spacing;
+//         this.markerObject = mod.SpawnObject(mod.RuntimeSpawn_Common.BarrierStoneBlock_01_A, origin.toModVector(), mod.CreateVector(0, 0, 0), mod.CreateVector(1, 1, 1));
+//         this.vfxOffset = 0;
+//     }
+//     makeBooms() {
+//         mod.SetObjectTransform(this.markerObject, mod.CreateTransform(this.origin.toModVector(), mod.CreateVector(0, 0, 0)));
+//         for (let row = 0; row < this.numRows; row++) {
+//             for (let col = 0; col < this.numCols; col++) {
+//                 const position = new Driveways.Physics.Vec3(this.origin.x + col * this.spacing, this.origin.y + row * this.spacing, this.origin.z);
+//                 // VFX.makeABoom(position);
+//                 let index = (this.vfxOffset + row * this.numCols + col) % explosionsVFX.length;
+//                 VFXSpawner.spawnVFX(explosionsVFX[index], position, 1000);
+//             }
+//         }
+//     }
+//     public moveOriginForward(distance: number) {
+//         this.origin.z += distance;
+//     }
+//     public nextVFX() {
+//         this.vfxOffset++;
+//         this.vfxOffset %= explosionsVFX.length;
+//     }
+// }
 
 // test max good-ish performance move rate is 5 ticks for 16 vfx objects, 1000ms vfx object lifetime ~100 living, ~150 freed
 
-class VFXFollower {
-    index: number;
-    lastVFXSpawnTick: number;
-    maxConcurrentVFX: number;
-    constructor(index: number) {
-        this.index = index;
-        this.lastVFXSpawnTick = 0;
-        this.maxConcurrentVFX = 16;
-    }
-    update() {
-        if (Driveways.Time.CurrentTick() > this.lastVFXSpawnTick + 5) {
-            this.lastVFXSpawnTick = Driveways.Time.CurrentTick();
-            for (let i = 0; i < this.maxConcurrentVFX; i++) {
-                const combinedIndex = this.index + i;
-                const vfxIndex = combinedIndex % explosionsVFX.length;
-                const followerIndex = combinedIndex * 3 % FOLLOWER_PATH.length;
-                const vfx = explosionsVFX[vfxIndex];
-                if (!vfx) {
-                    Error("VFX not found");
-                    return;
-                }
-                VFXSpawner.spawnVFX(explosionsVFX[vfxIndex], Driveways.Physics.Vec3.fromArray(FOLLOWER_PATH, followerIndex), 1000);
-                Log("VFX spawned at " + Driveways.Physics.Vec3.fromArray(FOLLOWER_PATH, followerIndex).x + ", " + Driveways.Physics.Vec3.fromArray(FOLLOWER_PATH, followerIndex).y + ", " + Driveways.Physics.Vec3.fromArray(FOLLOWER_PATH, followerIndex).z);
-            }
-            this.index += this.maxConcurrentVFX;
-            this.index %= explosionsVFX.length;
-        }
-    }
-    getPosition(index: number) {
-        // follower path position
-        const followerPathIndex = ((this.index + index) * 3) % FOLLOWER_PATH.length;
-        const position = Driveways.Physics.Vec3.fromArray(FOLLOWER_PATH, followerPathIndex);
-        return position;
-    }
-}
+// class VFXFollower {
+//     index: number;
+//     lastVFXSpawnTick: number;
+//     maxConcurrentVFX: number;
+//     constructor(index: number) {
+//         this.index = index;
+//         this.lastVFXSpawnTick = 0;
+//         this.maxConcurrentVFX = 16;
+//     }
+//     update() {
+//         if (Driveways.Time.CurrentTick() > this.lastVFXSpawnTick + 5) {
+//             this.lastVFXSpawnTick = Driveways.Time.CurrentTick();
+//             for (let i = 0; i < this.maxConcurrentVFX; i++) {
+//                 const combinedIndex = this.index + i;
+//                 const vfxIndex = combinedIndex % explosionsVFX.length;
+//                 const followerIndex = combinedIndex * 3 % FOLLOWER_PATH.length;
+//                 const vfx = explosionsVFX[vfxIndex];
+//                 if (!vfx) {
+//                     Error("VFX not found");
+//                     return;
+//                 }
+//                 VFXSpawner.spawnVFX(explosionsVFX[vfxIndex], Driveways.Physics.Vec3.fromArray(FOLLOWER_PATH, followerIndex), 1000);
+//                 Log("VFX spawned at " + Driveways.Physics.Vec3.fromArray(FOLLOWER_PATH, followerIndex).x + ", " + Driveways.Physics.Vec3.fromArray(FOLLOWER_PATH, followerIndex).y + ", " + Driveways.Physics.Vec3.fromArray(FOLLOWER_PATH, followerIndex).z);
+//             }
+//             this.index += this.maxConcurrentVFX;
+//             this.index %= explosionsVFX.length;
+//         }
+//     }
+//     getPosition(index: number) {
+//         // follower path position
+//         const followerPathIndex = ((this.index + index) * 3) % FOLLOWER_PATH.length;
+//         const position = Driveways.Physics.Vec3.fromArray(FOLLOWER_PATH, followerPathIndex);
+//         return position;
+//     }
+// }
 
 // on game start make vfx grid
-let vfxGrid: VFXTestGrid | null = null;
-let vfxFollowers: VFXFollower[] = [];
-Driveways.Events.OnGameModeStarted(() => {
-    // vfxGrid = new VFXTestGrid(new Driveways.Physics.Vec3(-84.28,70,-61.43), 4, 4, 10);
-    // for (let i = 0; i < 1; i++) {
-    //     vfxFollowers.push(new VFXFollower(i));
-    // }
-});
+// let vfxGrid: VFXTestGrid | null = null;
+// let vfxFollowers: VFXFollower[] = [];
+// Driveways.Events.OnGameModeStarted(() => {
+//     // vfxGrid = new VFXTestGrid(new Driveways.Physics.Vec3(-84.28,70,-61.43), 4, 4, 10);
+//     // for (let i = 0; i < 1; i++) {
+//     //     vfxFollowers.push(new VFXFollower(i));
+//     // }
+// });
 let ticksInDirection = 0;
 let direction = 1;
 let gridMoveTickRate = 10;
-Driveways.Events.OngoingGlobal(() => {
-    for (const follower of vfxFollowers) {
-        follower.update();
-    }
-    // Driveways.RateLimiter.everyNTicks('vfx_grid_move', gridMoveTickRate, () => {
-    //     if (vfxGrid) {
-    //         vfxGrid.moveOriginForward(10 * direction);
-    //         vfxGrid.makeBooms();
-    //         vfxGrid.nextVFX();
-    //         ticksInDirection++;
-    //         if (ticksInDirection >= 10) {
-    //             direction *= -1;
-    //             ticksInDirection = 0;
-    //         }
-    //     }
-    // });
-});
+// Driveways.Events.OngoingGlobal(() => {
+//     for (const follower of vfxFollowers) {
+//         follower.update();
+//     }
+//     // Driveways.RateLimiter.everyNTicks('vfx_grid_move', gridMoveTickRate, () => {
+//     //     if (vfxGrid) {
+//     //         vfxGrid.moveOriginForward(10 * direction);
+//     //         vfxGrid.makeBooms();
+//     //         vfxGrid.nextVFX();
+//     //         ticksInDirection++;
+//     //         if (ticksInDirection >= 10) {
+//     //             direction *= -1;
+//     //             ticksInDirection = 0;
+//     //         }
+//     //     }
+//     // });
+// });
 let vfxDemo: VFXDemo | null = null;
 Driveways.Events.OnPlayerDeployed((player: mod.Player) => {
     // Driveways.DynamicUI.registerButton(mod.GetObjId(player), "vfx_grid_more_rows", () => {
@@ -3393,7 +3144,7 @@ Driveways.Events.OngoingGlobal(() => {
 
 class VFXDemo {
     spawnLocation: Driveways.Physics.Vec3;
-    lastVfxIndex: number;
+    vfxIndex: number;
     lastFireTick: number;
     fireInterval: number;
     textWidget: mod.UIWidget | undefined;
@@ -3401,9 +3152,10 @@ class VFXDemo {
     mannequin: mod.SpatialObject | undefined;
     vfxMap: Map<string, mod.RuntimeSpawn_Common>;
     vfxKeys: string[];
+    floor: mod.SpatialObject | undefined;
     constructor(spawnLocation: Driveways.Physics.Vec3, fireInterval: number) {
         this.spawnLocation = spawnLocation;
-        this.lastVfxIndex = 0;
+        this.vfxIndex = 0;
         this.lastFireTick = 0;
         this.fireInterval = fireInterval;
         this.vfxMap = GetCommonVFX();
@@ -3413,26 +3165,37 @@ class VFXDemo {
         if (existing) {
             mod.DeleteUIWidget(existing);
         }
-        // this.textWidget = modlib.ParseUI({
-        //     type: "Text",
-        //     name: displayTestName,
-        //     position: [0, 400],
-        //     size: [1400, 200],
-        //     anchor: mod.UIAnchor.Center,
-        //     visible: true,
-        //     bgColor: [0,0,0],
-        //     bgAlpha: 0.8,
-        //     bgFill: mod.UIBgFill.Solid,
-        //     textLabel: "",
-        //     textColor: [1, 1, 1],
-        //     textAlpha: 1,
-        //     textSize: 48,
-        //     textAnchor: mod.UIAnchor.Center,
-        // });
-        this.customDisplayText = new CustomDisplayText(displayTestName, [0, 400]);
-        this.mannequin = mod.SpawnObject(mod.RuntimeSpawn_Common.Basketball_01, this.spawnLocation.toModVector(), mod.CreateVector(0, 0, 0));
+        this.customDisplayText = new CustomDisplayText(displayTestName, [-100, 400]);
+        // this.mannequin = mod.SpawnObject(mod.RuntimeSpawn_Common.BarrierStoneBlock_01_A, this.spawnLocation.toModVector(), mod.CreateVector(0, 0, 0));
+        this.floor = mod.SpawnObject(mod.RuntimeSpawn_Common.FiringRange_Floor_01, this.spawnLocation.toModVector(), mod.CreateVector(0, 0, 0));
     }
 
+    registerButtons(player: mod.Player) {
+        // next, previous, fire
+        const VFXDemoButtonPrefix = 3000;
+
+        Driveways.DynamicUI.registerButton(mod.GetObjId(player), "vfx_demo_previous", () => {
+            this.previous();
+        }, mod.Message(VFXDemoButtonPrefix + 1));
+        Driveways.DynamicUI.registerButton(mod.GetObjId(player), "vfx_demo_next", () => {
+            this.next();
+        }, mod.Message(VFXDemoButtonPrefix + 2));
+        Driveways.DynamicUI.registerButton(mod.GetObjId(player), "vfx_demo_fire", () => {
+            this.fire();
+        }, mod.Message(VFXDemoButtonPrefix + 3));
+    }
+    next() {
+        this.vfxIndex++;
+        this.vfxIndex %= this.vfxKeys.length;
+        this.fire();
+    }
+    previous() {
+        this.vfxIndex--;
+        if (this.vfxIndex < 0) {
+            this.vfxIndex = this.vfxKeys.length - 1;
+        }
+        this.fire();
+    }
     update() {
         if (!Driveways.Time || !Driveways.Metrics) {
             return;
@@ -3440,25 +3203,24 @@ class VFXDemo {
         Driveways.Metrics.record('vfx_demo_start_ticks', 1);
         if (Driveways.Time.CurrentTick() > this.lastFireTick + this.fireInterval) {
             Driveways.Metrics.increment('vfx_demo_fires');
-            this.lastFireTick = Driveways.Time.CurrentTick();
             this.fire();
+            let vfxIndex = this.vfxIndex + 1;
+            vfxIndex %= this.vfxKeys.length;
+            this.vfxIndex = vfxIndex;
         }
         Driveways.Metrics.accumulate('vfx_demo_ticks', 1);
     }
 
     fire() {
         Driveways.Metrics.increment('vfx_demo_fires_internal');
-        let vfxIndex = this.lastVfxIndex + 1;
-        vfxIndex %= explosionsVFX.length;
-        this.lastVfxIndex = vfxIndex;
+        this.lastFireTick = Driveways.Time.CurrentTick();
         // const explosion = explosionsVFX[vfxIndex];
-        const vfxKey = this.vfxKeys[vfxIndex];
+        const vfxKey = this.vfxKeys[this.vfxIndex];
         const explosion = this.vfxMap.get(vfxKey);
         if (!explosion) {
             Error("VFX not found");
             return;
         }
-
         Driveways.Metrics.record('vfx_demo_string_key_length_0', explosion.toString().length);
         // const explosionString = mod.stringkeys[explosion as keyof typeof mod.stringkeys];
         const explosionString = vfxKey;
@@ -3475,27 +3237,203 @@ class VFXDemo {
             if (this.customDisplayText) {
                 this.customDisplayText.destroy();
             }
-            this.customDisplayText = new CustomDisplayText(explosionString, [-400, 400]);
+            this.customDisplayText = new CustomDisplayText(explosionString, [0, 400]);
         } else {
             Driveways.Metrics.record('vfx_demo_string_key_has', 0);
             Error("Explosion not found");
         }
         Driveways.Metrics.accumulate('vfx_demo_spawns_internal', 1);
-        VFXSpawner.spawnVFX(explosion, this.spawnLocation, 3000);
+        const offset = VFXDemoPositionOffset(vfxKey, explosion);
+        const vfxSpawnPosition = new Driveways.Physics.Vec3(this.spawnLocation.x + offset.x, this.spawnLocation.y + offset.y, this.spawnLocation.z + offset.z);
+        if (this.mannequin) {
+            // root position y, same z, x = root position + 5
+            const mannequinHorizontalOffset = offset.z * 0.33;
+            const mannequinPosition = new Driveways.Physics.Vec3(this.spawnLocation.x + mannequinHorizontalOffset, vfxSpawnPosition.y, vfxSpawnPosition.z);
+            mod.SetObjectTransform(this.mannequin, mod.CreateTransform(mannequinPosition.toModVector(), mod.CreateVector(0, 0, 0)));
+        }
+        if (this.floor) {
+            // const floorOffset = new Driveways.Physics.Vec3(-10.24, -7.27, 0);
+            // const floorPosition = mod.CreateVector(vfxSpawnPosition.x + floorOffset.x, vfxSpawnPosition.y + floorOffset.y, vfxSpawnPosition.z + floorOffset.z);
+            // mod.SetObjectTransform(this.floor, mod.CreateTransform(floorPosition, mod.CreateVector(Math.PI / -4, 0, 0)));
+            const floorTransform = FloorTransform(vfxKey, vfxSpawnPosition);
+            mod.SetObjectTransform(this.floor, floorTransform);
+        }
+        VFXSpawner.spawnVFX(explosion, vfxSpawnPosition, 8000);
         Driveways.Metrics.increment('vfx_demo_spawns');
     }
+
     moveTo(newPosition: Driveways.Physics.Vec3) {
-        this.spawnLocation = new Driveways.Physics.Vec3(newPosition.x, newPosition.y + 2, newPosition.z + 10);
+        this.spawnLocation = new Driveways.Physics.Vec3(newPosition.x, newPosition.y, newPosition.z);
         if (this.mannequin) {
             mod.SetObjectTransform(this.mannequin, mod.CreateTransform(mod.CreateVector(this.spawnLocation.x + 5, this.spawnLocation.y, this.spawnLocation.z), mod.CreateVector(0, 0, 0)));
         }
     }
 }
+// function FloorTransform(vfxKey: string, origin: Driveways.Physics.Vec3): mod.Transform {
+//     // target areas
+//     let offset = new Driveways.Physics.Vec3(-10, -7.27, 0);
+//     let rotation = new Driveways.Physics.Vec3(Math.PI / -4, 0, 0);
+//     if (vfxKey.indexOf("TargetArea") !== -1) {
+//         return mod.CreateTransform(mod.CreateVector(origin.x, origin.y, origin.z), mod.CreateVector(Math.PI / -4, 0, 0));
+//     }
+//     return mod.CreateTransform(mod.CreateVector(origin.x + offset.x, origin.y + offset.y, origin.z + offset.z), rotation.toModVector());
+// }
+
+// const floorOffset = new Driveways.Physics.Vec3(-10.24, 10.24, 20.48);
+// const floorPosition = mod.CreateVector(vfxSpawnPosition.x + floorOffset.x, vfxSpawnPosition.y + floorOffset.y, vfxSpawnPosition.z + floorOffset.z);
+// mod.SetObjectTransform(this.floor, mod.CreateTransform(floorPosition, mod.CreateVector(Math.PI / 4, 0, 0)));
+
+
+const floorCloseups = [
+    "Target_Area",
+    "Range_Indicator",
+    "FX_Gadget_AT4_Projectile_Trail"
+]
+function FloorTransform(vfxKey: string, origin: Driveways.Physics.Vec3): mod.Transform {
+    // target areas
+    // let offset = new Driveways.Physics.Vec3(-10.24, -7.27, 0);
+    let offset = new Driveways.Physics.Vec3(-10.24, -10.24, 10.48);
+    let rotation = new Driveways.Physics.Vec3(Math.PI / -2, 0, 0);
+    if (floorCloseups.some(closeup => vfxKey.indexOf(closeup) !== -1)) {
+        offset = new Driveways.Physics.Vec3(-10.24, -5, -2);
+        rotation = new Driveways.Physics.Vec3(Math.PI / -4, 0, 0);
+    }
+    return mod.CreateTransform(mod.CreateVector(origin.x + offset.x, origin.y + offset.y, origin.z + offset.z), rotation.toModVector());
+}
+
+
+const veryClose = new Driveways.Physics.Vec3(0, 2.2, 3);
+const mediumFar = new Driveways.Physics.Vec3(0, 2, 50);
+const mediumFarAndDownABit = new Driveways.Physics.Vec3(0, -2, 50);
+const mediumAndToTheRight = new Driveways.Physics.Vec3(-15, 2, 25);
+const prettyFar = new Driveways.Physics.Vec3(0, -20, 100);
+const veryFar = new Driveways.Physics.Vec3(0, -75, 300);
+const veryFarAndWayDown = new Driveways.Physics.Vec3(0, -200, 300);
+const upABit = new Driveways.Physics.Vec3(0, 4, 20);
+const upABitMore = new Driveways.Physics.Vec3(0, 6.5, 20);
+const closeAndUpABit = new Driveways.Physics.Vec3(0, 3, 10);
+const defaultOffset = new Driveways.Physics.Vec3(0, 2, 20);
+const forTheBirds = new Driveways.Physics.Vec3(0, -120, 60);
+const totheLeft = new Driveways.Physics.Vec3(5, 2, 20);
+const positionMap = {
+    "FX_Gadget_SmokeBarrage_AirBurst_Det": new Driveways.Physics.Vec3(-30, 2, 50),
+    "FX_AW_Distant_Cluster_Bomb_Line_Outskirts": veryFar,
+    "Jetwash": new Driveways.Physics.Vec3(40, 2, 50),
+    "FX_ArtilleryStrike_Explosion_01": mediumFarAndDownABit,
+    "FX_ArtilleryStrike_Explosion_GS": mediumFarAndDownABit,
+    "FX_Autocannon_30mm_AP_Hit_GS": veryClose,
+    "FX_Defib": veryClose,
+    "FX_BASE_Fire": veryClose,
+    "FX_BASE_Smoke_Column_XXL": prettyFar,
+    "FX_Carrier_Explosion_Dist": veryFar,
+    "FX_Gadget_IGLA_Launch": upABitMore,
+    "Repair_Tool": veryClose,
+    "EODBot": veryClose,
+    "Mine_Detonation": mediumFar,
+    "FX_Gadget_PTKM_Submunition_Trail": veryClose,
+    "Horizon": veryFar,
+    "FX_Bomb_Mk82_AIR_Detonation": mediumFar,
+    "FX_Mine_M18_Claymore_Detonation": mediumAndToTheRight,
+    "FX_Mine_M18_Claymore_Laser_Tripwire": veryClose,
+    "FX_Gadget_EIDOS_Projectile_Launch": mediumAndToTheRight,
+    "FX_Gadget_MPAPS_Projectile_Launch": mediumAndToTheRight,
+    "_Sabotage_": upABit,
+    "Impact_LoadoutCrate": upABitMore,
+    "Impact_LootCrate": closeAndUpABit,
+    "FX_LoadoutCrate_AirSpawn": mediumFarAndDownABit,
+    "FX_Missile_Javelin_Detonation": mediumFar,
+    "FX_Missile_MBTLAW_Hit": mediumFar,
+    "FX_Gadget_DeployableMortar_Projectile_Trail": veryClose,
+    "FX_CAP_AmbWar_Rocket_Strike": veryFar,
+    "FX_Decoy_Destruction": mediumAndToTheRight,
+    "FX_WireGuidedMissile_SpooledWire": veryClose,
+    "FX_Gadget_M320_Reload": veryClose,
+    "FX_Rocket_RPG7V2_Dud": veryClose,
+    "FX_Gadget_M4_SLAM_Detonation": mediumFarAndDownABit,
+    "FX_Granite_Strike_Smoke_Marker": closeAndUpABit,
+    "FX_Grenade_SignalSmoke_INV": mediumFarAndDownABit,
+    "FX_BASE_Birds_Black_Circulating": new Driveways.Physics.Vec3(0, -25, 40),
+    "FX_ShellEjection_DP12_12g_Buckshot": veryClose,
+    "FX_Panzerfaust_Projectile_Stabilizers": veryClose,
+    "FX_BD_Huge_Horizon_Exp": veryFarAndWayDown,
+    "FX_BD_Med_Horizon_Exp": veryFarAndWayDown,
+    "FX_ThrowingKnife_Trail": veryClose,
+    "FX_SP_Glint_Collectable": veryClose,
+    "FX_Missile_MBTLAW_Trail": totheLeft,
+    "FX_Missile_Stinger_Trail": totheLeft,
+    "FX_Missile_Javelin": totheLeft,
+    "RPG7V2_Trail": veryClose,
+    "FX_MF": veryClose,
+    "BreachingDart": veryClose,
+    "_Static": veryClose,
+    "_Flock": forTheBirds,
+    "_Underwater": mediumFarAndDownABit,
+}
+
+const ignoredVFX = [
+    "FX_BASE_DeployClouds_Var_A",
+    "FX_BASE_DeployClouds_Var_B",
+    "FX_BASE_Dust_Large_Area",
+    "FX_BASE_Fire_Oil_Medium",
+    "FX_BASE_Smoke_Dark_M",
+    "FX_AmbWar_UAV_Circling",
+    "fx_ambwar_artillarystrike",
+    "FX_Gadget_EIDOS_Lights_Active",
+    "FX_Gadget_EIDOS_Lights_Standby",
+    "FX_Grenade_BreachingDartFlashbang_BurnIn_ScreenEffect",
+    "FX_Blackhawk_Rotor_Vortex_Vapor",
+    "FX_BASE_Fire_XL",
+    "FX_BASE_Flies_Small",
+    "FX_Gadget_AirburstLauncher_Predicted_Line",
+    "FX_Gadget_Binoculars_ScopeGlint",
+    "FX_Gadget_AirburstLauncher_Predicted_Line",
+    "FX_Gadget_AirburstLauncher_Predicted_Point",
+    "FX_Gadget_AirburstLauncher_Predicted_Point_GroundConnect",
+    "FX_Gadget_Defib_LED",
+    "FX_Gadget_Defib_Recharge_LED",
+    "FX_Gadget_AmmoCrate_Area",
+    "FX_ProximityGrenade_Trail",
+    "FX_Missile_Javelin_Launch_SmokeTrail",
+    "FX_Grenade_Fragmentation_Trail",
+    "FX_Grenade_M67_Fragmentation_Trail",
+    "FX_Grenade_M84_Flashbang_Trail",
+    "FX_Grenade_MK32A_Concussion_Trail",
+    // "FX_Gadget_VehicleSupplyCrate_Range_Indicator",
+    // "FX_Gadget_VehicleSupplyCrate_Range_Indicator_Upgraded",
+    "FX_Gadget_SupplyCrate_Range_Indicator",
+    "FX_Gadget_SupplyCrate_Range_Indicator_Upgraded",
+    "FX_Gadget_InterativeSpectator_Camera_Light_Green",
+    "FX_Gadget_InterativeSpectator_Camera_Light_Yellow",
+    "FX_Gadget_MPAPS_Lights_Active",
+    "FX_Gadget_MPAPS_Lights_Standby",
+    "FX_Panzerfaust_Projectile_Stabilizers",
+    "FX_MortarStrike_Trail",
+    "FX_Gadget_Trophy_Range_Indicator",
+    "FX_Grenade_Smoke_Disarmed",
+    "FX_Grenade_Smoke_Explosion_High_Wind",
+    "FX_Grenade_Smoke_Trail",
+    "FX_MF_CarlGustaf_MK4_Launch",
+    "FX_RepairTool_Overheat_1P",
+    "FX_RepairTool_Overheat_3P",
+    "FX_Gadget_ReconDrone_Light",
+    "FX_Gadget_ReconDrone_OutOfRange_Distortion",
+    "FX_Gadget_SmokeBarrage_Cluster_VE"
+]
+
+function VFXDemoPositionOffset(vfxKey: string, vfx: mod.RuntimeSpawn_Common): Driveways.Physics.Vec3 {
+    let offsetPosition = defaultOffset;
+    for (const [key, offset] of Object.entries(positionMap)) {
+        if (vfxKey.indexOf(key) !== -1) {
+            offsetPosition = offset;
+        }
+    }
+    return new Driveways.Physics.Vec3(offsetPosition.x, offsetPosition.y, offsetPosition.z);
+}
 
 function GetCommonVFX(): Map<string, mod.RuntimeSpawn_Common> {
     const vfxMap = new Map<string, mod.RuntimeSpawn_Common>();
     for (const vfxKey of Object.keys(mod.RuntimeSpawn_Common)) {
-        if (typeof vfxKey === 'string' && vfxKey in mod.RuntimeSpawn_Common && vfxKey.startsWith("FX_")) {
+        if (typeof vfxKey === 'string' && vfxKey in mod.RuntimeSpawn_Common && vfxKey.toLowerCase().startsWith("fx_") && !ignoredVFX.includes(vfxKey)) {
             const vfx = mod.RuntimeSpawn_Common[vfxKey as keyof typeof mod.RuntimeSpawn_Common];
             if (vfx) {
                 vfxMap.set(vfxKey, vfx);
@@ -3529,9 +3467,11 @@ function GetVFXEnumString(vfxIncoming: mod.RuntimeSpawn_Common): string {
 class CustomDisplayText {
     text: string;
     textWidgets: mod.UIWidget[] = [];
+    defaultCharWidth: number = 30;
     constructor(text: string, position: number[]) {
         this.text = text;
         let index = 0;
+        const textWidth = text.length * this.defaultCharWidth;
         for (const character of text) {
             const textName = "custom_display_text_" + index + "_" + character;
             const existing = mod.FindUIWidgetWithName(textName);
@@ -3541,12 +3481,12 @@ class CustomDisplayText {
             const textWidget = modlib.ParseUI({
                 type: "Text",
                 name: textName,
-                position: [position[0] + CustomDisplayText.charWidth(character) * index, position[1]],
-                size: [30, 300],
+                position: [position[0] - textWidth / 2 + this.charWidth(character) * index, position[1]],
+                size: [this.defaultCharWidth, 50],
                 anchor: mod.UIAnchor.Center,
                 visible: true,
                 bgColor: [0, 0, 0],
-                bgAlpha: 1,
+                bgAlpha: 0.9,
                 bgFill: mod.UIBgFill.Solid,
                 textLabel: mod.Message(character),
                 textColor: [1, 1, 1],
@@ -3570,7 +3510,7 @@ class CustomDisplayText {
         }
         this.textWidgets = [];
     }
-    static charWidth(character: string): number {
-        return 30;
+    charWidth(character: string): number {
+        return this.defaultCharWidth;
     }
 }
