@@ -494,7 +494,7 @@ namespace Driveways {
             }
         }
         export function VectorToString(vector: mod.Vector): string {
-            return "(" + mod.XComponentOf(vector) + ", " + mod.YComponentOf(vector) + ", " + mod.ZComponentOf(vector) + ")";
+            return "" + mod.XComponentOf(vector).toFixed(2) + " " + mod.YComponentOf(vector).toFixed(2) + " " + mod.ZComponentOf(vector).toFixed(2) + "";
         }
         export function Log(message: string): void {
             Logger.log(message, LogLevel.Info);
@@ -1058,6 +1058,9 @@ namespace Driveways {
                 this.z = arr[offset + 2];
                 return this;
             }
+            clone(): Vec3 {
+                return new Vec3(this.x, this.y, this.z);
+            }
             toModVector(): mod.Vector {
                 return mod.CreateVector(this.x, this.y, this.z);
             }
@@ -1291,7 +1294,7 @@ class AttractorForce implements Driveways.Physics.IForce {
                 const playerX = mod.XComponentOf(playerPos);
                 const playerY = mod.YComponentOf(playerPos);
                 const playerZ = mod.ZComponentOf(playerPos);
-                this.position.set(playerX, playerY + 5, playerZ);
+                this.position.set(playerX, playerY, playerZ);
                 Log("Player deployed, setting attractor position to " + playerX + ", " + (playerY + 5) + ", " + playerZ);
             }
         });
@@ -1301,7 +1304,7 @@ class AttractorForce implements Driveways.Physics.IForce {
                 const playerX = mod.XComponentOf(playerPos);
                 const playerY = mod.YComponentOf(playerPos);
                 const playerZ = mod.ZComponentOf(playerPos);
-                this.position.set(playerX, playerY + 40, playerZ);
+                this.position.set(playerX, playerY, playerZ);
             }
         });
     }
@@ -1323,6 +1326,10 @@ const _firingrangeLogoBox = mod.RuntimeSpawn_Common.FiringRange_LogoBox_01; // s
 
 
 
+interface Vec3Transform {
+    position: Driveways.Physics.Vec3;
+    rotation: Driveways.Physics.Vec3;
+}
 
 class WallOfBlocks {
     originPosition: mod.Vector;
@@ -1336,15 +1343,15 @@ class WallOfBlocks {
     positions: Float32Array;
     velocities: Float32Array;
     forces: Float32Array;
-    pendingTransforms: Map<number, mod.Transform> = new Map();
+    pendingTransforms: Map<number, Vec3Transform> = new Map();
     maxObjectTransformCallsPerTick: number;
     maxPhysUpdatesPerTick: number;
     lastBlockUpdated: number;
     lastTransformTick: Uint32Array;
     transformUpdateInterval: number;
     spatialGrid: Driveways.Physics.SpatialGrid;
-    maxSpeed: number = 1.5;
-    maxForce: number = 0.8;
+    maxSpeed: number = 0.5;
+    maxForce: number = 0.01;
     forceSystems: Driveways.Physics.IForce[] = [];
     private lastPhysicsIndex: number = 0;
     private perceptionRadius: number = 6.0;
@@ -1364,7 +1371,7 @@ class WallOfBlocks {
         this.maxPhysUpdatesPerTick = 100;
         this.lastBlockUpdated = 0;
         const totalBlocks = numBlocksPerRow * numRows;
-        this.perceptionRadius = 6.0;
+        this.perceptionRadius = 20.0;
         this.spatialGrid = new Driveways.Physics.SpatialGrid(this.perceptionRadius * 2);
         this.positions = new Float32Array(totalBlocks * 3);
         this.velocities = new Float32Array(totalBlocks * 3);
@@ -1406,9 +1413,39 @@ class WallOfBlocks {
     }
     private initializeForceSystems(perceptionRadius: number): void {
         this.forceSystems.push(new SeparationForce(4.0, 3.0, perceptionRadius));
-        this.forceSystems.push(new AlignmentForce(0.8, perceptionRadius));
-        this.forceSystems.push(new CohesionForce(0.5, perceptionRadius));
+        this.forceSystems.push(new AlignmentForce(0, perceptionRadius));
+        this.forceSystems.push(new CohesionForce(0, perceptionRadius));
         this.forceSystems.push(new AttractorForce(new Driveways.Physics.Vec3(-204, 220, 135), 0.6, 25.0));
+    }
+    adjustMaxSpeed(delta: number) {
+        const next = this.maxSpeed + delta;
+        this.maxSpeed = next > 0 ? next : 0;
+        this.logWeights();
+    }
+    adjustMaxForce(delta: number) {
+        const next = this.maxForce + delta;
+        this.maxForce = next > 0 ? next : 0;
+        this.logWeights();
+    }
+    adjustForceWeight(name: string, delta: number) {
+        const force = this.forceSystems.find((f) => f.name === name);
+        if (!force) {
+            return;
+        }
+        const next = force.weight + delta;
+        force.weight = next > 0 ? next : 0;
+        this.logWeights();
+    }
+    logWeights() {
+        let msg = "Force weights: ";
+        for (const force of this.forceSystems) {
+            msg += `${force.name}: ${force.weight}, `;
+        }
+        // max force
+        msg += `, Max force: ${this.maxForce}`;
+        // max speed
+        msg += `, Max speed: ${this.maxSpeed}`;
+        Log(msg);
     }
     create() {
         const originX = mod.XComponentOf(this.originPosition);
@@ -1427,16 +1464,41 @@ class WallOfBlocks {
                     this.positions[idx + 2]
                 );
                 const block = mod.SpawnObject(
-                    mod.RuntimeSpawn_Common.BarrierStoneBlock_01_A,
+                    // mod.RuntimeSpawn_Common.BarrierStoneBlock_01_A,
+                    mod.RuntimeSpawn_Common.FX_Missile_Javelin,
                     blockPosition,
                     mod.CreateVector(0, 0, 0)
                 );
+                mod.EnableVFX(block as mod.VFX, true);
                 this.blockIds.push(mod.GetObjId(block));
                 this.blockObjects.push(block);
                 blockIndex++;
             }
         }
         this.spatialGrid.clearAndRebuild(this.positions);
+    }
+
+    getEngineVFXObject(blockId: number): mod.RuntimeSpawn_Common {
+        const velocity = Driveways.Physics.Vec3.fromArray(this.velocities, blockId * 3);
+        const velocityMagnitude = velocity.magnitude();
+        const maxVelocity = this.maxSpeed;
+
+        // below 20% of max velocity, no engine vfx
+        const ratio = velocityMagnitude / maxVelocity;
+        if (ratio < 0.6) {
+            // return mod.RuntimeSpawn_Common.FX_Grenade_Incendiary_Trail;
+            // return mod.RuntimeSpawn_Common.FX_ProjectileTrail_M320_Incendiary;
+            return mod.RuntimeSpawn_Common.FX_Granite_Strike_Smoke_Marker_Yellow;
+        } else if (ratio < 0.7) {
+            // return mod.RuntimeSpawn_Common.FX_Missile_MBTLAW_Trail;
+            return mod.RuntimeSpawn_Common.FX_Granite_Strike_Smoke_Marker_Red;
+        } else if (ratio < 0.9) {
+            // igla
+            // return mod.RuntimeSpawn_Common.FX_Missile_Stinger_Trail;
+            return mod.RuntimeSpawn_Common.FX_Granite_Strike_Smoke_Marker_Violet
+        }
+        // return mod.RuntimeSpawn_Common.FX_Missile_Javelin;
+        return mod.RuntimeSpawn_Common.FX_Granite_Strike_Smoke_Marker_Green;
     }
     updateTransforms(): void {
         let startBlock = this.lastBlockUpdated;
@@ -1450,7 +1512,33 @@ class WallOfBlocks {
                 const ticksSinceLastTransform = Driveways.Time.TicksSince(lastTransformTick);
                 if (ticksSinceLastTransform >= this.transformUpdateInterval) {
                     this.lastTransformTick[currentBlock] = Driveways.Time.CurrentTick();
-                    mod.SetObjectTransform(this.blockObjects[currentBlock], transform);
+                    // mod.SetObjectTransform(this.blockObjects[currentBlock], transform);
+                    const blockObject = this.blockObjects[currentBlock];
+                    if (blockObject) {
+                        // mod.SetObjectTransform(blockObject, transform);
+                        // mod.UnspawnObject(blockObject);
+                        // const newBlock = mod.SpawnObject(
+                        //     this.getEngineVFXObject(currentBlock),
+                        //     transform.position.toModVector(),
+                        //     transform.rotation.toModVector()
+                        // );
+                        // mod.EnableVFX(newBlock as mod.VFX, true);
+                        // this.blockObjects[currentBlock] = newBlock;
+                        // this.blockIds[currentBlock] = mod.GetObjId(newBlock);
+                        const newBlock = VFXSpawner.spawnVFX(this.getEngineVFXObject(currentBlock), transform.position, 3000 + Math.random() * 1000, transform.rotation);
+                        if (newBlock) {
+                            this.blockObjects[currentBlock] = GetVFXObject(newBlock);
+                            this.blockIds[currentBlock] = newBlock.vfxObjectId;
+                        }
+
+                        // update spatial grid
+                        this.spatialGrid.updateBlock(currentBlock, this.positions);
+
+
+                        // mod.EnableVFX(blockObject as mod.VFX, false);
+                        // mod.EnableVFX(blockObject as mod.VFX, true);
+                        // mod.MoveVFX(blockObject as mod.VFX, transform.position.toModVector(), transform.rotation.toModVector());
+                    }
                     this.pendingTransforms.delete(currentBlockId);
                     transformsApplied++;
                 }
@@ -1528,11 +1616,14 @@ class WallOfBlocks {
                 updatedBlockIndices.push(i);
             }
             const velocityEuler = this._tempVel.directionToEuler();
-            const transform = mod.CreateTransform(
-                this._tempPos.toModVector(),
-                mod.CreateVector(velocityEuler.x, velocityEuler.y, velocityEuler.z)
-            );
-            this.pendingTransforms.set(this.blockIds[i], transform);
+            // const transform = mod.CreateTransform(
+            //     this._tempPos.toModVector(),
+            //     mod.CreateVector(velocityEuler.x, velocityEuler.y, velocityEuler.z)
+            // );
+            this.pendingTransforms.set(this.blockIds[i], {
+                position: this._tempPos.clone(),
+                rotation: velocityEuler.clone()
+            });
             physUpdates++;
             currentIndex = (currentIndex + 1) % totalBlocks;
         }
@@ -1676,7 +1767,7 @@ Driveways.Events.OnPlayerDeployed((player) => {
     Log("Player deployed");
 });
 // const surfers = new Surfers();
-// const blockSwarm = new WallOfBlocks(mod.CreateVector(-204, 220, 135), 4, 4, 1.5, 1.5, 1.5);
+const blockSwarm = new WallOfBlocks(mod.CreateVector(-204, 220, 135), 4, 4, 1.5, 1.5, 1.5);
 // const mapper = new Driveways.Terrain.Mapper(1.0);
 // const grid = new Driveways.Terrain.Grid(10, 10, 20, 1000, new Driveways.Physics.Vec3(0, 180, 0), mod.RuntimeSpawn_Common.HighwayOverpass_Foundation_01);
 
@@ -2575,6 +2666,49 @@ function PlayerUIButtons(player: mod.Player) {
         redwallRotation.z -= 0.1;
         makeRedWall();
       }, mod.Message((rotationMask + zMask) * -1));
+      const blockSwarmMask = 4000;
+      const speedMessage = blockSwarmMask + 1;
+      const forceMessage = blockSwarmMask + 2;
+      const separationMessage = blockSwarmMask + 3;
+      const alignmentMessage = blockSwarmMask + 4;
+      const cohesionMessage = blockSwarmMask + 5;
+      const attractorMessage = blockSwarmMask + 6;
+      Driveways.DynamicUI.registerButton(playerId, "block_swarm_speed_inc", () => {
+        blockSwarm.adjustMaxSpeed(0.1);
+      }, mod.Message(speedMessage));
+      Driveways.DynamicUI.registerButton(playerId, "block_swarm_speed_dec", () => {
+        blockSwarm.adjustMaxSpeed(-0.1);
+      }, mod.Message(-speedMessage));
+      Driveways.DynamicUI.registerButton(playerId, "block_swarm_force_inc", () => {
+        blockSwarm.adjustMaxForce(0.01);
+      }, mod.Message(forceMessage));
+      Driveways.DynamicUI.registerButton(playerId, "block_swarm_force_dec", () => {
+        blockSwarm.adjustMaxForce(-0.01);
+      }, mod.Message(-forceMessage));
+      Driveways.DynamicUI.registerButton(playerId, "block_swarm_separation_inc", () => {
+        blockSwarm.adjustForceWeight("Separation", 0.1);
+      }, mod.Message(separationMessage));
+      Driveways.DynamicUI.registerButton(playerId, "block_swarm_separation_dec", () => {
+        blockSwarm.adjustForceWeight("Separation", -0.1);
+      }, mod.Message(-separationMessage));
+      Driveways.DynamicUI.registerButton(playerId, "block_swarm_alignment_inc", () => {
+        blockSwarm.adjustForceWeight("Alignment", 0.1);
+      }, mod.Message(alignmentMessage));
+      Driveways.DynamicUI.registerButton(playerId, "block_swarm_alignment_dec", () => {
+        blockSwarm.adjustForceWeight("Alignment", -0.1);
+      }, mod.Message(-alignmentMessage));
+      Driveways.DynamicUI.registerButton(playerId, "block_swarm_cohesion_inc", () => {
+        blockSwarm.adjustForceWeight("Cohesion", 0.1);
+      }, mod.Message(cohesionMessage));
+      Driveways.DynamicUI.registerButton(playerId, "block_swarm_cohesion_dec", () => {
+        blockSwarm.adjustForceWeight("Cohesion", -0.1);
+      }, mod.Message(-cohesionMessage));
+      Driveways.DynamicUI.registerButton(playerId, "block_swarm_attractor_inc", () => {
+        blockSwarm.adjustForceWeight("Attractor", 0.1);
+      }, mod.Message(attractorMessage));
+      Driveways.DynamicUI.registerButton(playerId, "block_swarm_attractor_dec", () => {
+        blockSwarm.adjustForceWeight("Attractor", -0.1);
+      }, mod.Message(-attractorMessage));
 
       Driveways.DynamicUI.registerButton(mod.GetObjId(player), "start_vfx_demo", () => {
         vfxDemo = new VFXDemo(new Driveways.Physics.Vec3(-200, 385, 353), 300);
@@ -2699,9 +2833,20 @@ Driveways.Events.OngoingPlayer((player: mod.Player) => {
     //     // mod.EnableVFX(vfxObject, true);
     // });
 });
-// Driveways.Events.OnPlayerDeployed((player: mod.Player) => {
-//     mod.SetCameraTypeForPlayer(player, mod.Cameras.ThirdPerson);
-// });
+const playerCameraTypes = new Map<number, number>();
+Driveways.Events.OnPlayerDeployed((player: mod.Player) => {
+    playerCameraTypes.set(mod.GetObjId(player), 3);
+    mod.SetCameraTypeForPlayer(player, mod.Cameras.ThirdPerson);
+    // button to toggle camera type
+    Driveways.DynamicUI.registerButton(mod.GetObjId(player), "toggle_camera_type", () => {
+        const cameraType = playerCameraTypes.get(mod.GetObjId(player));
+        if (cameraType) {
+            playerCameraTypes.set(mod.GetObjId(player), cameraType === 3 ? 1 : 3);
+            mod.SetCameraTypeForPlayer(player, cameraType === 3 ? mod.Cameras.FirstPerson : mod.Cameras.ThirdPerson);
+        }
+    }, mod.Message(8000));
+});
+
 
 
 interface SpawnedVFX {
@@ -2710,6 +2855,7 @@ interface SpawnedVFX {
     vfxObjectId: number;
     position: Driveways.Physics.Vec3;
     expiresAt: Date;
+    disablesAt: Date;
 }
 function GetVFXObject(spawned: SpawnedVFX): mod.VFX {
     return mod.GetVFX(spawned.vfxObjectId);
@@ -2728,20 +2874,33 @@ function IsValidVFXObject(vfxObject: mod.VFX): boolean {
     return true;
 }
 
-let vfxRotation = new Driveways.Physics.Vec3(0, Math.PI / 2, 0);
+let vfxRotation = new Driveways.Physics.Vec3(0, 0, 0);
+let vfxRotationDisplay: CustomDisplayText | undefined;
+function UpdateVFXRotationDisplay() {
+    const text = "Rot " + VectorToString(vfxRotation.toModVector());
+    if (vfxRotationDisplay) {
+        vfxRotationDisplay.destroy();
+    }
+    vfxRotationDisplay = new CustomDisplayText(text, [0, 520]);
+}
 let store_free_vfx = false;
 class VFXSpawner {
     static spawnedVFX: SpawnedVFX[] = [];
     static VFX_LIMIT = 1000;
     static freeList = new Map<mod.RuntimeSpawn_Common, SpawnedVFX[]>();
-    static spawnVFX(vfx: mod.RuntimeSpawn_Common, position: Driveways.Physics.Vec3, expiresAfter: number): SpawnedVFX | null {
+    static spawnVFX(vfx: mod.RuntimeSpawn_Common, position: Driveways.Physics.Vec3, expiresAfter: number, rotation?: Driveways.Physics.Vec3): SpawnedVFX | null {
+        let _rotation = vfxRotation.clone();
+        if (rotation) {
+            _rotation.addMut(rotation);
+        }
         // if item in freeList, use it
         const free = this.freeList.get(vfx);
         if (free && free.length > 0) {
-                const freeVfx = free.shift();
-                if (free.length === 0) {
-                    this.freeList.delete(vfx);
-                }
+            const freeVfx = free.shift();
+            if (free.length === 0) {
+                this.freeList.delete(vfx);
+            }
+
             if (freeVfx && IsValidVFXObject(GetVFXObject(freeVfx))) {
                 const vfxObject = GetVFXObject(freeVfx);
                 if (!IsValidVFXObject(vfxObject)) {
@@ -2749,7 +2908,7 @@ class VFXSpawner {
                     Error("VFX object is undefined or null");
                 } else {
                     mod.EnableVFX(vfxObject, true);
-                    mod.MoveVFX(vfxObject, position.toModVector(), mod.CreateVector(0, Math.PI / 2, 0));
+                    mod.MoveVFX(vfxObject, position.toModVector(), _rotation.toModVector());
                     this.spawnedVFX.push(freeVfx);
                     freeVfx.position = position;
                     freeVfx.expiresAt = new Date(Date.now() + expiresAfter);
@@ -2788,7 +2947,7 @@ class VFXSpawner {
             Driveways.Metrics.increment('vfx_limit_reached');
             return null;
         }
-        const vfxObject = mod.SpawnObject(vfx, position.toModVector(), vfxRotation.toModVector(), mod.CreateVector(1, 1, 1));
+        const vfxObject = mod.SpawnObject(vfx, position.toModVector(), _rotation.toModVector(), mod.CreateVector(1, 1, 1));
         
         if (!IsValidVFXObject(vfxObject)) {
             Driveways.Metrics.increment('vfx_spawn_error');
@@ -2803,33 +2962,44 @@ class VFXSpawner {
             type: vfx,
             vfxObjectId: mod.GetObjId(vfxObject),
             position: position,
-            expiresAt: new Date(Date.now() + expiresAfter),
+            expiresAt: new Date(Date.now() + expiresAfter + 5000),
+            disablesAt: new Date(Date.now() + expiresAfter),
         };
         // Log(`Spawning VFX: ${vfx} at ${position.x}, ${position.y}, ${position.z}`);
         this.spawnedVFX.push(spawned);
         return spawned;
     }
+    static logVfxRotation() {
+        Log("VFX rotation: " + VectorToString(vfxRotation.toModVector()));
+        UpdateVFXRotationDisplay();
+    }
     static registerButtons(player: mod.Player) {
         // rotation x,y,z +- by Pi/16
-        const rotDelta = Math.PI / 16;
+        const rotDelta = Math.PI / 2;
         const vfxSpawnerRotationPrefix = 5000;
         Driveways.DynamicUI.registerButton(mod.GetObjId(player), "vfx_spawner_rotation_x", () => {
             vfxRotation.x += rotDelta;
+            this.logVfxRotation();
         }, mod.Message(vfxSpawnerRotationPrefix + 0));
         Driveways.DynamicUI.registerButton(mod.GetObjId(player), "vfx_spawner_rotation_y", () => {
             vfxRotation.y += rotDelta;
+            this.logVfxRotation();
         }, mod.Message(vfxSpawnerRotationPrefix + 1));
         Driveways.DynamicUI.registerButton(mod.GetObjId(player), "vfx_spawner_rotation_z", () => {
             vfxRotation.z += rotDelta;
+            this.logVfxRotation();
         }, mod.Message(vfxSpawnerRotationPrefix + 2));
         Driveways.DynamicUI.registerButton(mod.GetObjId(player), "vfx_spawner_rotation_x_minus", () => {
             vfxRotation.x -= rotDelta;
+            this.logVfxRotation();
         }, mod.Message(vfxSpawnerRotationPrefix * -1));
         Driveways.DynamicUI.registerButton(mod.GetObjId(player), "vfx_spawner_rotation_y_minus", () => {
             vfxRotation.y -= rotDelta;
+            this.logVfxRotation();
         }, mod.Message(vfxSpawnerRotationPrefix * -1 - 1));
         Driveways.DynamicUI.registerButton(mod.GetObjId(player), "vfx_spawner_rotation_z_minus", () => {
             vfxRotation.z -= rotDelta;
+            this.logVfxRotation();
         }, mod.Message(vfxSpawnerRotationPrefix * -1 - 2));
     }
     static numFree(): number {
@@ -2844,6 +3014,14 @@ class VFXSpawner {
         let freed = 0;
         let unspawnedAtLimit = 0;
         this.spawnedVFX = this.spawnedVFX.filter(spawned => {
+            if (spawned.disablesAt < now) {
+                // disable vfx
+                const vfxObject = GetVFXObject(spawned);
+                if (IsValidVFXObject(vfxObject)) {
+                    mod.EnableVFX(vfxObject, false);
+                }
+            }
+
             if (spawned.expiresAt < now) {
                 if (store_free_vfx && this.spawnedVFX.length + this.numFree() < this.VFX_LIMIT) {
                     Log("Freeing VFX: " + GetVFXName(spawned.type));
@@ -3496,52 +3674,44 @@ const ignoredVFX = [
     "FX_BASE_DeployClouds_Var_A",
     "FX_BASE_DeployClouds_Var_B",
     "FX_BASE_Dust_Large_Area",
-    // "FX_BASE_Fire_Oil_Medium",
+    "FX_BASE_Flies_Small",
     "FX_BASE_Smoke_Dark_M",
-    // "FX_AmbWar_UAV_Circling",
-    // "fx_ambwar_artillarystrike",
-    "FX_Gadget_EIDOS_Lights_Active",
-    "FX_Gadget_EIDOS_Lights_Standby",
-    "FX_Grenade_BreachingDartFlashbang_BurnIn_ScreenEffect",
     "FX_Blackhawk_Rotor_Vortex_Vapor",
-    // "FX_BASE_Fire_XL",
-    // "FX_BASE_Flies_Small",
-    "FX_Gadget_Binoculars_ScopeGlint",
-    // "FX_Gadget_AirburstLauncher_Predicted_Line",
-    "FX_Gadget_AirburstLauncher_Predicted_Point",
     "FX_Gadget_AirburstLauncher_Predicted_Point_GroundConnect",
+    "FX_Gadget_AirburstLauncher_Predicted_Point",
+    "FX_Gadget_AmmoCrate_Area",
+    "FX_Gadget_Binoculars_ScopeGlint",
     "FX_Gadget_Defib_LED",
     "FX_Gadget_Defib_Recharge_LED",
-    "FX_Gadget_AmmoCrate_Area",
-    "FX_ProximityGrenade_Trail",
-    "FX_Missile_Javelin_Launch_SmokeTrail",
+    "FX_Gadget_EIDOS_Lights_Active",
+    "FX_Gadget_EIDOS_Lights_Standby",
+    "FX_Gadget_InterativeSpectator_Camera_Light_Green",
+    "FX_Gadget_InterativeSpectator_Camera_Light_Yellow",
+    "FX_Gadget_Mine_AT_Warning_Light",
+    "FX_Gadget_MPAPS_Lights_Active",
+    "FX_Gadget_MPAPS_Lights_Standby",
+    "FX_Gadget_ReconDrone_Light",
+    "FX_Gadget_ReconDrone_OutOfRange_Distortion",
+    "FX_Gadget_SmokeBarrage_Cluster_Trail",
+    "FX_Gadget_SmokeBarrage_Cluster_VE",
+    "FX_Gadget_SupplyCrate_Range_Indicator_Upgraded",
+    "FX_Gadget_SupplyCrate_Range_Indicator",
+    "FX_Gadget_Trophy_Range_Indicator",
+    "FX_Grenade_BreachingDartFlashbang_BurnIn_ScreenEffect",
     "FX_Grenade_Fragmentation_Trail",
     "FX_Grenade_M67_Fragmentation_Trail",
     "FX_Grenade_M84_Flashbang_Trail",
     "FX_Grenade_MK32A_Concussion_Trail",
-    // "FX_Gadget_VehicleSupplyCrate_Range_Indicator",
-    // "FX_Gadget_VehicleSupplyCrate_Range_Indicator_Upgraded",
-    "FX_Gadget_SupplyCrate_Range_Indicator",
-    "FX_Gadget_SupplyCrate_Range_Indicator_Upgraded",
-    "FX_Gadget_InterativeSpectator_Camera_Light_Green",
-    "FX_Gadget_InterativeSpectator_Camera_Light_Yellow",
-    "FX_Gadget_MPAPS_Lights_Active",
-    "FX_Gadget_MPAPS_Lights_Standby",
-    "FX_Panzerfaust_Projectile_Stabilizers",
-    "FX_MortarStrike_Trail",
-    "FX_Gadget_Trophy_Range_Indicator",
     "FX_Grenade_Smoke_Disarmed",
     "FX_Grenade_Smoke_Explosion_High_Wind",
     "FX_Grenade_Smoke_Trail",
-    // "FX_MF_CarlGustaf_MK4_Launch",
+    "FX_Missile_Javelin_Launch_SmokeTrail",
+    "FX_MortarStrike_Trail",
+    "FX_Panzerfaust_Projectile_Stabilizers",
+    "FX_ProximityGrenade_Trail",
     "FX_RepairTool_Overheat_1P",
     "FX_RepairTool_Overheat_3P",
-    "FX_Gadget_ReconDrone_Light",
-    "FX_Gadget_ReconDrone_OutOfRange_Distortion",
-    "FX_Gadget_SmokeBarrage_Cluster_VE",
-    "FX_Gadget_Mine_AT_Warning_Light",
-    "FX_Gadget_SmokeBarrage_Cluster_Trail",
-]
+];
 
 function VFXDemoPositionOffset(vfxKey: string, vfx: mod.RuntimeSpawn_Common): Driveways.Physics.Vec3 {
     let offsetPosition = defaultOffset;
@@ -3591,12 +3761,15 @@ class CustomDisplayText {
     text: string;
     textWidgets: mod.UIWidget[] = [];
     defaultCharWidth: number = 30;
+    private static counter = 0;
+    private id: number;
     constructor(text: string, position: number[]) {
+        this.id = CustomDisplayText.counter++;
         this.text = text;
         let index = 0;
         const textWidth = text.length * this.defaultCharWidth;
         for (const character of text) {
-            const textName = "custom_display_text_" + index + "_" + character;
+            const textName = "custom_display_text_" + this.id + "_" + index + "_" + character;
             const existing = mod.FindUIWidgetWithName(textName);
             if (existing) {
                 mod.DeleteUIWidget(existing);
@@ -3637,3 +3810,4 @@ class CustomDisplayText {
         return this.defaultCharWidth;
     }
 }
+UpdateVFXRotationDisplay();

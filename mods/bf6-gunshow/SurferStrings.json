@@ -80,6 +80,8 @@
     "\\": "\\",
     "/": "/",
     "?": "?",
+    ".": ".",
+    ",": ",",
     "vfx_unknown": "VFX Unknown",
     "FX_Airburst_Incendiary_Detonation": "FX_Airburst_Incendiary_Detonation",
     "FX_Airburst_Incendiary_Detonation_Friendly": "FX_Airburst_Incendiary_Detonation_Friendly",
